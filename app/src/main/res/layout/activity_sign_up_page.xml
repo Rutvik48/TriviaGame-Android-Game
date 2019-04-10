@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
+    tools:context=".SignUpPage">
+
+    <include layout="@layout/top_menu_bar" />
+
+    <TextView
+        android:id="@+id/tvAlreadyLoggedIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Already Logged in? Click here"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.898" />
+
+    <TextView
+        android:id="@+id/tvLoginInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Enter Email address and password to create an acount"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.143" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="347dp"
+        android:layout_marginVertical="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="106dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/tvAlreadyLoggedIn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvLoginInfo">
+
+        <EditText
+            android:id="@+id/etEmailID"
+            android:layout_width="273dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:hint="E-mail address"
+            android:inputType="textEmailAddress"
+            tools:layout_editor_absoluteX="96dp"
+            tools:layout_editor_absoluteY="188dp" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="269dp"
+            android:layout_height="51dp"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            tools:layout_editor_absoluteX="77dp"
+            tools:layout_editor_absoluteY="266dp" />
+
+        <EditText
+            android:id="@+id/etPhoneNumber"
+            android:layout_width="264dp"
+            android:layout_height="45dp"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:hint="Phone Number (Optional)"
+            android:inputType="phone"
+            tools:layout_editor_absoluteX="77dp"
+            tools:layout_editor_absoluteY="357dp" />
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="212dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="60dp"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:fontFamily="cursive"
+            android:text="Sign Up"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:textColor="#096164"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="108dp"
+            tools:layout_editor_absoluteY="467dp" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

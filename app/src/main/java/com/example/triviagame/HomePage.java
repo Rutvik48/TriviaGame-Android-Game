@@ -1,26 +1,17 @@
 package com.example.triviagame;
 
+
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
-import android.support.constraint.Constraints;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.prefs.PreferenceChangeEvent;
-
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.auth.FirebaseUser;
 
 
 public class HomePage extends AppCompatActivity {
@@ -28,14 +19,14 @@ public class HomePage extends AppCompatActivity {
     //variables to assign the button or text that user see on screen
     //NOTE: btn is for Button, tv for TextView
     private Button btn_GameStart, btn_BackHome, btn_UserInfo;
-    private TextView tv_LogIn, tv_ChangeBackground;
+    public TextView tv_LogIn, tv_ChangeBackground, tv_GameName;
     private ConstraintLayout layout;
-    //private FirebaseAuth firebaseAuth;
     //to exit the app this condition will be used
     private Boolean exitCondition = false;
-    private int backgroundNum = 0;
-    private SharedPreferences backgroundPreferences;
-    private SharedPreferences.Editor preferencesEditor;
+
+    private FirebaseAuth auth;
+
+    HeaderClass headerClassInstance = new HeaderClass();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,93 +39,87 @@ public class HomePage extends AppCompatActivity {
         // this will assign variables to button, text, etc from xml file
         assignVariables();
 
-        backgroundPreferences = PreferenceManager.getDefaultSharedPreferences(HomePage.this);
-        preferencesEditor = backgroundPreferences.edit();
-        saveBackground(backgroundPreferences.getInt("Background", 0));
+        initializeSettings();
+
+        checkUser();
+
+        clickListner();
+        changeBackground();
+
+    }
+
+    public void checkUser(){
+        //get firebase auth instance
+        auth = FirebaseAuth.getInstance();
+
+
+        //this checks if any user is logged in or not
+        if (auth.getCurrentUser() != null){
+            //if user is looged in hide the "log in/ Sign up" text
+            tv_LogIn.setVisibility(View.INVISIBLE);
+        }else{
+            //when there is no user logged in, hide the UserInfo text
+            btn_UserInfo.setVisibility(View.GONE);
+        }
+    }
+
+
+    //set settings based on user preferences
+    private void initializeSettings(){
+
+        headerClassInstance.setBackground(layout, getApplicationContext());
 
         //we do not need to show BackHome button on HomePage
         btn_BackHome.setVisibility(View.INVISIBLE);
 
         //set text programmatically rather than doing fix text using xml
+        tv_GameName.setText(HeaderClass.GAME_NAME);
         btn_GameStart.setText("Start Game");
         tv_LogIn.setText("Log in / Sign Up");
 
-
-        tv_LogIn.setOnClickListener(tv_LogIn_Listner);
-        btn_UserInfo.setOnClickListener(btn_UserInfo_Listner);
-        btn_GameStart.setOnClickListener(btn_GameStart_Listner);
-        tv_ChangeBackground.setOnClickListener(tv_ChangeBackground_Listner);
-
-
     }
 
-    View.OnClickListener btn_UserInfo_Listner = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(HomePage.this, PopUpWindow.class);
-            startActivity(intent);
-        }
-    };
+    //this method is called when a user clicks any button on Home Screen
+    private void clickListner(){
 
-    View.OnClickListener btn_GameStart_Listner = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(HomePage.this, CategoriesPage.class);
-            startActivity(intent);
-        }
-    };
-
-
-    View.OnClickListener tv_LogIn_Listner = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(HomePage.this, LogInPage.class);
-            startActivity(intent);
-            finish();
-
-        }
-    };
-
-    //change background of constraint
-    View.OnClickListener tv_ChangeBackground_Listner = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            backgroundPreferences = PreferenceManager.getDefaultSharedPreferences(HomePage.this);
-            preferencesEditor = backgroundPreferences.edit();
-
-
-            if (backgroundNum == 0){
-                layout.setBackgroundResource(backgroundPreferences.getInt("BackgroundNum",0));
-                saveBackground(R.drawable.background_gradient1);
-                backgroundNum = 1;
-            }else{
-                layout.setBackgroundResource(R.drawable.background_gradient);
-                backgroundNum = 0;
+        btn_UserInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), PopUpWindow.class));
             }
+        });
 
-            //change background of constraint
-            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                if (backgroundNum == 0){
-                    layout.setBackgroundResource(backgroundPreferences.getInt("BackgroundNum",0));
-                    saveBackground(R.drawable.background_gradient1);
-                }else{
-                    layout.setBackgroundResource(R.drawable.background_gradient);
-                    backgroundNum = 0;
-                }
-            }else{
-                tv_ChangeBackground.setVisibility(View.INVISIBLE);
+        btn_GameStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),CategoriesPage.class));
+                finish();
+            }
+        });
 
-            }*/
-        }
-    };
-
-    private void saveBackground(int backNum){
-        backgroundPreferences = PreferenceManager.getDefaultSharedPreferences(HomePage.this);
-        preferencesEditor = backgroundPreferences.edit();
-
-        preferencesEditor.putInt("BackgroundNum", backNum);
-        preferencesEditor.commit();
+        tv_LogIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), LogInPage.class));
+                finish();
+            }
+        });
     }
+
+    //using HeaderClass this method changes background of application
+    private void changeBackground(){
+        tv_ChangeBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int backgroundNum = headerClassInstance.getCurBackground(getApplicationContext());
+
+                int temp = headerClassInstance.chnageBackground(backgroundNum, layout);
+
+                headerClassInstance.saveBackground(temp, getApplicationContext());
+            }
+        });
+    }
+
     public void setFullScreen(){
 
         //hides the title bar
@@ -148,14 +133,19 @@ public class HomePage extends AppCompatActivity {
 
     }
 
+    //function to assign buttons and texts to java variables
     private void assignVariables(){
-        btn_GameStart = (Button)findViewById(R.id.btnGameStart);
-        tv_LogIn = (TextView)findViewById(R.id.tvLogIn);
-        btn_BackHome = (Button)findViewById(R.id.btnBackToHome);
-        btn_UserInfo = (Button)findViewById(R.id.btnUserInfo);
-        tv_ChangeBackground = (TextView)findViewById(R.id.tvChangeBackground);
-        layout = (ConstraintLayout)findViewById(R.id.layoutHeader);
+
+        btn_GameStart = findViewById(R.id.btnGameStart);
+        tv_LogIn = findViewById(R.id.tvLogIn);
+        btn_BackHome = findViewById(R.id.btnBackToHome);
+        btn_UserInfo = findViewById(R.id.btnUserInfo);
+        tv_ChangeBackground = findViewById(R.id.tvChangeBackground);
+        layout = findViewById(R.id.layoutHeader);
+        tv_GameName = findViewById(R.id.tvGameName);
     }
+
+    //asks user to click twice on back button to exit the app
     @Override
     public void onBackPressed() {
         if (exitCondition){

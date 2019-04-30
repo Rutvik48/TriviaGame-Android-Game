@@ -1,23 +1,46 @@
 package com.example.triviagame;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.CountDownTimer;
+import android.os.SystemClock;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Random;
 
 public class QuestionPage extends AppCompatActivity {
 
-    private TextView tv_Question ;
-    private Button btn_Option1,btn_Option2,btn_Option3,btn_Option4, tv_time, tv_ScorePoints;
-    private String rightAnswer;
+    private TextView tv_Question, tv_Timer, tv_Category ;
+    private Button btn_Option1,btn_Option2,btn_Option3,btn_Option4, btn_ScorePoints, btn_BackToHome, btn_NextQuestion;
+    private String option1, option2, option3, option4, rightAnswer;
+    private int currentPoints = 0;
+    private int skippedQuestions = 0;
     private static int TOTAL_QUESTIONS;
-    private static Boolean RANDOM_QUESTION;
+    private static boolean RANDOM_QUESTION;
+    private ConstraintLayout layout;
+    private boolean timerRunning, isAnswerPicked;
+    private CountDownTimer countDownTimer;
+    private long timeLeftInMills = 6000;
+    //will be used to return id answer was right or wrong
+    boolean homeCondition;
+    //category in order of 1.Science & Nature, 2.Science: Computers, 3.General Knowledge
+    // 4.Geography, 5.Sport, 6.Vehicle, 7.Celebrities, 8.History
+    private int []numberOfQestionByCategory = {139,80,141,142,69,34,25,123};
+    private int []categoryQuesStartAt = {1,140,220,361,503,572,606,631};
+    private int []selectedCategories;
+    private int numberOfCategories = 8;
+    private CategoriesPage categoriesPage = new CategoriesPage();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,47 +52,235 @@ public class QuestionPage extends AppCompatActivity {
         assignValues();
         setTotalQuestions();
 
-        setQuestion();
-        resetQuestionPage();
+        startClock();
 
-        tv_time.setText("Time");
-        tv_ScorePoints.setText("Score /\n Points");
-        //HomePage homePage = new HomePage();
+        btn_BackToHome.setText("Back To\n Home");
+        btn_ScorePoints.setText(" 00 ");
 
-        //homePage.setFullScreen();
+        HeaderClass headerClassInstance = new HeaderClass();
+        headerClassInstance.setBackground(layout, getApplicationContext());
+
+
+        clickedOption();
+
+        nextQuestion();
+
+        backToHome();
+    }
+
+
+
+    private void backToHome(){
+
+        btn_BackToHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                categoriesPage = null;
+                if(homeCondition){
+                    startActivity(new Intent(getApplicationContext(),HomePage.class));
+                    finish();
+                    stopTimer();
+                }else{
+                    Toast.makeText(getApplicationContext(),"Press again to go to Home.", Toast.LENGTH_LONG).show();
+                    homeCondition = true;
+                }
+            }
+        });
+
+    }
+
+    private void addPoint(){
+        //increase points by 10
+        currentPoints += 10;
+        updateScoreText(currentPoints);
+    }
+
+
+    private void deductPoint(){
+        //deduct points by 5
+        currentPoints -= 5;
+        updateScoreText(currentPoints);
+    }
+
+    private void updateScoreText(int score){
+        String strScore = Integer.toString(score);
+        btn_ScorePoints.setText(strScore+ "    ");
     }
 
     public void setRandomQuestionTrue(){
-        this.RANDOM_QUESTION = true;
+        RANDOM_QUESTION = true;
     }
 
+    public void setRandomQuestionFalse(){
+        RANDOM_QUESTION = false;
+    }
 
-    private void setQuestion(){
+    private void setTotalQuestions(){
+
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
-        //databaseAccess.close();
+
         databaseAccess.open();
 
-        //String querry_result = databaseAccess.getAddress("");
-        int randomID = getRandomNum(TOTAL_QUESTIONS);
-        String []tempArray = databaseAccess.getAddress(randomID);;
-
-        tv_Question.setText(tempArray[0]);
-        rightAnswer = tempArray[1];
-
-        btn_Option2.setText(rightAnswer);
-
+        TOTAL_QUESTIONS = databaseAccess.totalQuestions();
         databaseAccess.close();
     }
 
-    public void resetQuestionPage(){
-        btn_Option2.setOnClickListener(new View.OnClickListener() {
+
+    public void getQuestion(){
+
+        hideNextQuestionBtn();
+        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
+
+        databaseAccess.open();
+
+        if(RANDOM_QUESTION){
+            int randomID = getRandomNum(TOTAL_QUESTIONS);
+            String []tempArray = databaseAccess.getData(randomID);
+
+            resetQuestion(tempArray);
+        }else{
+
+            //this returns number from 0 to number of selected categories -1
+            //ex. if user selects 4 categories, this returns a random number from 0 to 3
+            int randCategory = getRandomNum((categoriesPage.selectedCategories.length)-1);
+
+            //randCategory equals to ID number stored at random number returned by getRandomNum(...
+            randCategory = categoriesPage.selectedCategories[randCategory];
+
+            //range equals to number of questions available for selected category
+            int range = numberOfQestionByCategory[randCategory-1];
+
+            int randomID = getRandomNum(range);
+
+            randomID += categoryQuesStartAt[randCategory-1];
+
+            String []tempArray = databaseAccess.getData(randomID);
+
+            resetQuestion(tempArray);
+        }
+
+        databaseAccess.close();
+
+    }
+
+    private void hideNextQuestionBtn(){
+
+        //by making this boolean false user can select an option
+        isAnswerPicked = false;
+        btn_NextQuestion.setVisibility(View.GONE);
+    }
+
+    private void showNextQuestionBtn(){
+
+        //by making this boolean true user cannot select any option anymore
+        isAnswerPicked = true;
+
+        btn_NextQuestion.setVisibility(View.VISIBLE);
+    }
+
+    public void resetQuestion(String[] array){
+
+        tv_Question.setText(array[0]);
+        tv_Category.setText(array[6]);
+        rightAnswer = array[5].trim();
+        btn_Option1.setText(array[1].trim());
+        btn_Option2.setText(array[2].trim());
+        btn_Option3.setText(array[3].trim());
+        btn_Option4.setText(array[4].trim());
+    }
+
+    private void clickedOption(){
+
+        if(!isAnswerPicked){
+            btn_Option1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkAnswer(btn_Option1);
+
+                }
+            });
+
+            btn_Option2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    checkAnswer(btn_Option2);
+                }
+            });
+
+            btn_Option3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    checkAnswer(btn_Option3);
+                }
+            });
+
+            btn_Option4.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    checkAnswer(btn_Option4);
+                }
+            });
+        }
+    }
+
+    private void checkAnswer(Button clickedBtn){
+
+        if(!isAnswerPicked){
+            stopTimer();
+
+            showNextQuestionBtn();
+
+            if (rightAnswer.equals(clickedBtn.getText())){
+                clickedBtn.setTextColor(Color.GREEN);
+                addPoint();
+            }else{
+                clickedBtn.setTextColor(Color.RED);
+                deductPoint();
+                showRightAnswer();
+            }
+
+        }
+    }
+
+    private void showRightAnswer(){
+
+        if (rightAnswer.equals(btn_Option1.getText().toString().trim()))
+            btn_Option1.setTextColor(Color.GREEN);
+        else if (rightAnswer.equals(btn_Option2.getText().toString().trim()))
+            btn_Option2.setTextColor(Color.GREEN);
+        else if (rightAnswer.equals(btn_Option3.getText().toString().trim()))
+            btn_Option3.setTextColor(Color.GREEN);
+        else if (rightAnswer.equals(btn_Option4.getText().toString().trim()))
+            btn_Option4.setTextColor(Color.GREEN);
+
+    }
+
+    private void nextQuestion(){
+
+        btn_NextQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //getRandomNum(TOTAL_QUESTIONS);
-                startActivity(new Intent(getApplicationContext(),QuestionPage.class));
-                finish();
+                getQuestion();
+                resetOptionColor();
+                startTimer();
             }
         });
+    }
+
+    private void resetOptionColor(){
+
+        btn_Option1.setTextColor(Color.BLACK);
+        btn_Option2.setTextColor(Color.BLACK);
+        btn_Option3.setTextColor(Color.BLACK);
+        btn_Option4.setTextColor(Color.BLACK);
+    }
+
+    public  void sleep(){
+        SystemClock.sleep(1000);
     }
 
     public int getRandomNum(int range){
@@ -79,15 +290,73 @@ public class QuestionPage extends AppCompatActivity {
 
     public void assignValues(){
         tv_Question = findViewById(R.id.tvQuestion);
+        tv_Timer = findViewById(R.id.tvTimer);
+        tv_Category = findViewById(R.id.tvCategory);
         btn_Option1 = findViewById(R.id.btnOption1);
         btn_Option2 = findViewById(R.id.btnOption2);
         btn_Option3 = findViewById(R.id.btnOption3);
         btn_Option4 = findViewById(R.id.btnOption4);
+        btn_NextQuestion = findViewById(R.id.btnNextQuestion);
         //using "Back Home" and "User Info" buttons from top_menu_bar.xml
-        tv_ScorePoints = findViewById(R.id.btnUserInfo);
-        tv_time = findViewById(R.id.btnBackToHome);
+        btn_ScorePoints = findViewById(R.id.btnUserInfo);
+        btn_BackToHome = findViewById(R.id.btnBackToHome);
+        layout = findViewById(R.id.constraintLayout);
 
     }
+    public void startClock(){
+        if(timerRunning){
+            stopTimer();
+        }else{
+            startTimer();
+        }
+
+        getQuestion();
+    }
+    public void stopTimer(){
+
+        countDownTimer.cancel();
+        timerRunning = false;
+    }
+
+    public void startTimer(){
+        countDownTimer = new CountDownTimer(timeLeftInMills, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMills = millisUntilFinished;
+                updateTimer();
+            }
+
+            @Override
+            public void onFinish() {
+                EndPage endPage = new EndPage();
+                endPage.setTotalPoints(currentPoints);
+                startActivity(new Intent(getApplicationContext(),EndPage.class));
+                finish();
+            }
+        }.start();
+    }
+
+    public void updateTimer(){
+
+        int minutes = (int)timeLeftInMills/60000;
+        int seconds = (int) timeLeftInMills %60000/1000;
+
+        String timeLeftText;
+
+        timeLeftText = "";
+        if(minutes<10)timeLeftText ="0";
+        timeLeftText += ""+minutes;
+        timeLeftText += ":";
+
+        if(seconds<10)timeLeftText +="0";
+        timeLeftText += seconds;
+
+        tv_Timer.setText(timeLeftText);
+
+    }
+
+
     public void setFullScreen(){
 
         //hides the title bar
@@ -96,19 +365,11 @@ public class QuestionPage extends AppCompatActivity {
         //this code makes the status bar transparent
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        );
-
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
-    private void setTotalQuestions(){
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
-        //databaseAccess.close();
-        databaseAccess.open();
+    @Override
+    public void onBackPressed() {
 
-        //Toast.makeText(getApplicationContext(), Integer.toString(databaseAccess.totalQuestions()),Toast.LENGTH_LONG).show();
-        this.TOTAL_QUESTIONS = databaseAccess.totalQuestions();
-        databaseAccess.close();
     }
-
 }

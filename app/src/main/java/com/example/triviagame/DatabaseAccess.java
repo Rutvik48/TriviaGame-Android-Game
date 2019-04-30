@@ -11,6 +11,7 @@ public class DatabaseAccess {
     private SQLiteDatabase db;
     private static DatabaseAccess instance;
     Cursor cursor = null;
+    HeaderClass headerClass = new HeaderClass();
 
     private DatabaseAccess(Context context){
         this.openHelper = new DatabaseOpenHelper(context);
@@ -34,29 +35,58 @@ public class DatabaseAccess {
         }
     }
     public int totalQuestions(){
-        cursor = db.rawQuery("SELECT * FROM Trivia",new String[]{});
+        cursor = db.rawQuery("SELECT * FROM "+ HeaderClass.TABLE_NAME,new String[]{});
         //cursor.moveToFirst();
         return cursor.getCount();
 
-        //return Integer.parseInt(cursor.getString(0));
-        /*int temp;
-        while(cursor.moveToNext()){
-            temp = Integer.parseInt(cursor.getString(0));
-            //temp[1] = cursor.getString(1);
-            //buffer.append(""+address+"");
+    }
+    private int totalCategory(){
+        cursor = db.rawQuery("SELECT Category From trivia_questions GROUP BY Category"+ HeaderClass.TABLE_NAME,new String[]{});
+        //cursor.moveToFirst();
+        return cursor.getCount();
 
-        }
-        return 1500;*/
     }
 
-    public String[] getAddress(int randomID){
-        cursor = db.rawQuery("SELECT Question, Answer FROM Trivia WHERE ID = " + randomID,new String[]{});
-        String[] temp = new String[]{"", ""};
-        //StringBuffer buffer = new StringBuffer();
+
+
+    public String[] getCategories(){
+        int number = totalCategory();
+        String categoryArray[] = new String[number];
+
+        cursor = db.rawQuery("SELECT Category From trivia_questions GROUP BY Category",new String[]{});
+
+        return categoryArray;
+    }
+
+    public String[] getData(int randomID){
+        cursor = db.rawQuery("SELECT "
+                        +headerClass.QUESTION_COL+", "
+                        +headerClass.OPTION1_COL+", "
+                        +headerClass.OPTION2_COL+", "
+                        +headerClass.OPTION3_COL+", "
+                        +headerClass.OPTION4_COL+", "
+                        +headerClass.CORRECT_ANS_COL+", "
+                        +headerClass.CATEGORY_COL+
+                        " FROM "+ HeaderClass.TABLE_NAME +
+                         " WHERE "+headerClass.ID_COL+" = " +
+                            randomID,new String[]{});
+
+        String[] temp = new String[]{"", "","","", "","",""};
+
         while(cursor.moveToNext()){
-            temp[0] = cursor.getString(0);
-            temp[1] = cursor.getString(1);
-            //buffer.append(""+address+"");
+
+            for (int i = 0; i <7; i++){
+                temp[i] = cursor.getString(i);
+            }
+            /*
+            temp[0] = cursor.getString(0); //Question
+            temp[1] = cursor.getString(1); //Option1
+            temp[2] = cursor.getString(2); //Option2
+            temp[3] = cursor.getString(3); //Option3
+            temp[4] = cursor.getString(4); //Option4
+            temp[5] = cursor.getString(5); //correct_answer
+            temp[6] = cursor.getString(6); //category
+            //buffer.append(""+address+"");*/
         }
 
         return temp;

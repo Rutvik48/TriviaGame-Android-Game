@@ -2,11 +2,12 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LogInPage">
 
-    <include layout="@layout/top_menu_bar"/>
+    <include layout="@layout/top_menu_bar" />
 
     <EditText
         android:id="@+id/etUserName"
@@ -53,12 +54,12 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Login"
         android:background="@android:drawable/screen_background_light_transparent"
+        android:fontFamily="cursive"
+        android:text="Login"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="#096164"
         android:textStyle="bold"
-        android:fontFamily="cursive"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -67,7 +68,7 @@
         app:layout_constraintVertical_bias="0.185" />
 
     <Button
-        android:id="@+id/btnSignUp"
+        android:id="@+id/resetPasswordField"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -76,12 +77,12 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Sign Up"
         android:background="@android:drawable/screen_background_light_transparent"
+        android:fontFamily="cursive"
+        android:text="Sign Up"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="#096164"
         android:textStyle="bold"
-        android:fontFamily="cursive"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
@@ -106,5 +107,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.795" />
+
+    <TextView
+        android:id="@+id/tvForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Forot password?"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/resetPasswordField" />
 
 </android.support.constraint.ConstraintLayout>

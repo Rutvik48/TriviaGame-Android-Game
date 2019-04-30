@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
+        multiDexEnabled true        
         applicationId "com.example.triviagame"
         minSdkVersion 15
         targetSdkVersion 28
@@ -29,6 +30,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.firebase:firebase-firestore:17.1.0'
+    implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
 }
 

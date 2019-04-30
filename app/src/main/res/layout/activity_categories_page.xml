@@ -8,7 +8,10 @@
     android:visibility="visible"
     tools:context=".CategoriesPage">
 
-    <include layout="@layout/top_menu_bar" />
+    <include
+        layout="@layout/top_menu_bar"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <TextView
         android:id="@+id/tvInfoText"
@@ -98,10 +101,9 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
-        android:layout_height="219dp"
+        android:layout_height="265dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
@@ -110,14 +112,17 @@
         android:scrollbarStyle="insideOverlay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.76">
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
+            android:id="@+id/catLinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="-20dp"
             android:layout_margin="10dp"
             android:orientation="vertical">
 
@@ -128,7 +133,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:fontFamily="cursive"
-                android:text="Art"
+                android:text="Category 1"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="26sp" />
@@ -140,7 +145,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:fontFamily="cursive"
-                android:text="Computer Science"
+                android:text="Category 2"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="26sp" />
@@ -152,7 +157,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:fontFamily="cursive"
-                android:text="Entertainment"
+                android:text="Category 3"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="26sp" />
@@ -160,10 +165,10 @@
             <TextView
                 android:id="@+id/tvCategory4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="cursive"
-                android:text="General Knowledge"
+                android:text="Category 4"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="26sp" />
@@ -175,7 +180,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:fontFamily="cursive"
-                android:text="History"
+                android:text="Category 5"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="26sp" />
@@ -187,7 +192,19 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:fontFamily="cursive"
-                android:text="Movies and TV Shows"
+                android:text="Category 6"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/tvCategory8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:fontFamily="cursive"
+                android:text="Category 7"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="26sp" />
@@ -195,11 +212,12 @@
             <TextView
                 android:id="@+id/tvCategory7"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="10dp"
+                android:layout_marginBottom="30dp"
                 android:layout_weight="1"
                 android:fontFamily="cursive"
-                android:text="Sports"
+                android:text="Category 8"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="26sp" />
@@ -229,7 +247,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="36dp"
@@ -244,7 +261,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.961" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
 </android.support.constraint.ConstraintLayout>

@@ -52,7 +52,6 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="cursive"
-        android:text="Trivia Game"
         android:textColor="#096164"
         android:textSize="60sp"
         android:textStyle="bold"
@@ -84,6 +83,7 @@
 
     <TextView
         android:id="@+id/tvChangeBackground"
+        android:text="Change Background"
         android:layout_width="wrap_content"
         android:layout_height="43dp"
         android:layout_marginStart="8dp"
@@ -91,7 +91,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:fontFamily="cursive"
-        android:text="Change Background"
         android:textColor="#096164"
         android:textSize="20sp"
         android:textStyle="bold"

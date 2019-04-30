@@ -2,10 +2,10 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PopUpWindow"
-    android:background="@drawable/background_gradient1">
+    tools:context=".PopUpWindow">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -28,35 +28,44 @@
             android:id="@+id/tvUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="#UserName#"
-            android:textSize="30sp"
             android:layout_marginBottom="30dp"
             android:fontFamily="cursive"
             android:textAppearance="@style/TextAppearance.AppCompat.Display2"
             android:textColor="#096164"
-            android:textStyle="bold"/>
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvHighestScore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="HighestScore: ##"
-            android:textSize="30sp"
             android:layout_marginBottom="30dp"
             android:fontFamily="cursive"
             android:textAppearance="@style/TextAppearance.AppCompat.Display2"
             android:textColor="#096164"
-            android:textStyle="bold"/>
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvTotalCoin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:fontFamily="cursive"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:textColor="#096164"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnSignOut"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:text="Sign Out"
             android:background="@android:drawable/screen_background_light_transparent"
             android:fontFamily="cursive"
+            android:text="Sign Out"
             android:textAppearance="@style/TextAppearance.AppCompat.Display2"
             android:textColor="#096164"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

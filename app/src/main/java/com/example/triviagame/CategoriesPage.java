@@ -2,24 +2,35 @@ package com.example.triviagame;
 
 
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static android.graphics.Color.rgb;
 
 public class CategoriesPage extends AppCompatActivity {
 
     private TextView textCategory1, textCategory2, textCategory3,
-            textCategory4, textCategory5, textCategory6, textCategory7;
-
-    private int categoryState1 = 0, categoryState2 = 0, categoryState3 = 0,
-            categoryState4 = 0, categoryState5 = 0, categoryState6 = 0, categoryState7 = 0;
+            textCategory4, textCategory5, textCategory6, textCategory7, textCategory8;
+    public static boolean categoryState1, categoryState2, categoryState3,
+            categoryState4, categoryState5, categoryState6, categoryState7, categoryState8;
 
     private Button btn_Continue, btn_BackHome, btn_UserInfo, btn_RandomQuestion;
+
+    //selectedCategories holds ID number of selected categorie(s)
+    //category in order of 1.Science & Nature, 2.Science: Computers, 3.General Knowledge
+    // 4.Geography, 5.Sport, 6.Vehicle, 7.Celebrities, 8.History
+    public static int []selectedCategories;
+    private ConstraintLayout layout;
+    private LinearLayout linearLayout;
+    //private QuestionPage questionPage = new QuestionPage();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +45,28 @@ public class CategoriesPage extends AppCompatActivity {
         //will be called when user click on the button or text
         isClicked();
 
+        setCategoryNames();
+
         //show question randomly
         startRandomQuestion();
 
+        HeaderClass headerClassInstance = new HeaderClass();
+        headerClassInstance.setBackground(layout, getApplicationContext());
 
+        //CreateButton();
+    }
+
+    private void setCategoryNames(){
+        //category in order of 1.Science & Nature, 2.Science: Computers, 3.General Knowledge
+        // 4.Geography, 5.Sport, 6.Vehicle, 7.Celebrities, 8.History
+        textCategory1.setText("Science & Nature");
+        textCategory2.setText("Science: Computers");
+        textCategory3.setText("General Knowledge");
+        textCategory4.setText("Geography");
+        textCategory5.setText("Sport");
+        textCategory6.setText("Vehicle");
+        textCategory7.setText("Celebrities");
+        textCategory8.setText("History");
     }
 
 
@@ -59,17 +88,13 @@ public class CategoriesPage extends AppCompatActivity {
     }
     private void isClicked(){
 
-        textCategory1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                categoryState1 = setTextState(textCategory1,categoryState1);
-                checkCategoryState();
-            }
-        });
-
         btn_Continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getSlectedCategories();
+
+                QuestionPage questionPage = new QuestionPage();
+                questionPage.setRandomQuestionFalse();
                 Intent intent = new Intent(CategoriesPage.this, QuestionPage.class);
                 startActivity(intent);
                 finish();
@@ -92,11 +117,22 @@ public class CategoriesPage extends AppCompatActivity {
                 finish();
             }
         });
+
+        textCategory1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categoryState1 = setTextState(textCategory1,categoryState1);
+                checkCategoryState();
+                //categoryState1 = true;
+            }
+        });
+
         textCategory2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 categoryState2 = setTextState(textCategory2,categoryState2);
                 checkCategoryState();
+                //categoryState2 = true;
             }
         });
 
@@ -105,6 +141,7 @@ public class CategoriesPage extends AppCompatActivity {
             public void onClick(View v) {
                 categoryState3 = setTextState(textCategory3,categoryState3);
                 checkCategoryState();
+                //categoryState3 = true;
             }
         });
 
@@ -139,15 +176,78 @@ public class CategoriesPage extends AppCompatActivity {
                 checkCategoryState();
             }
         });
+
+        textCategory8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                categoryState8 = setTextState(textCategory8,categoryState8);
+                checkCategoryState();
+            }
+        });
+    }
+
+    private boolean clickListner(TextView textCategory, boolean categoryState){
+
+        categoryState = setTextState(textCategory,categoryState);
+        checkCategoryState();
+        return categoryState;
+
     }
 
     //this method checks which category are/is selected
     private void checkCategoryState(){
-        if((categoryState1 == 1)||(categoryState2 == 1)||(categoryState3 == 1)||(categoryState4 == 1)||
-                (categoryState5 == 1)||(categoryState6 == 1)||(categoryState7 == 1)||false)
+        if((categoryState1)||(categoryState2)||
+                (categoryState3)||(categoryState4)||
+                (categoryState5)||(categoryState6)||
+                (categoryState7)||(categoryState8))
             btn_Continue.setVisibility(View.VISIBLE);
         else
             btn_Continue.setVisibility(View.INVISIBLE);
+    }
+
+    public void makeAllCategoryStateFalse(){
+        categoryState1 = false;
+        categoryState2 = false;
+        categoryState3 = false;
+        categoryState4 = false;
+        categoryState5 = false;
+        categoryState6 = false;
+        categoryState7 = false;
+        categoryState8 = false;
+    }
+
+    public void getSlectedCategories(){
+        String categoryString = "";
+
+        if(categoryState1)
+            categoryString += "1,";
+        if(categoryState2)
+            categoryString += "2,";
+        if(categoryState3)
+            categoryString += "3,";
+        if(categoryState4)
+            categoryString += "4,";
+        if(categoryState5)
+            categoryString += "5,";
+        if(categoryState6)
+            categoryString += "6,";
+        if(categoryState7)
+            categoryString += "7,";
+        if(categoryState8)
+            categoryString += "8,";
+
+        makeAllCategoryStateFalse();
+        String stringArray[] = categoryString.split(",");
+        selectedCategories = changeToIntArray(stringArray, stringArray.length);
+    }
+
+    private int []changeToIntArray(String[] array, int length){
+        int tempArray[] = new int[length];
+
+        for (int i = 0; i <length; i++)
+            tempArray[i] = Integer.parseInt(array[i]);
+
+        return tempArray;
     }
 
     public void setFullScreen() {
@@ -163,36 +263,50 @@ public class CategoriesPage extends AppCompatActivity {
     }
 
     //changes text color to indicate selected category
-    private int setTextState(TextView textView, int categoryState){
+    private boolean setTextState(TextView textView, boolean categoryState){
 
-        if(categoryState == 0){
+        if(categoryState == false){
             textView.setTextColor(0xFFFF0000);
             textView.setTextSize(33);
-            categoryState = 1;
+            categoryState = true;
         }else{
             textView.setTextColor(0xFF000000);
             textView.setTextSize(26);
-            categoryState = 0;
+            categoryState = false;
         }
 
         return categoryState;
     }
 
+    private void CreateButton(){
+
+        TextView btnShow = new TextView(this);
+
+        btnShow.setText("Dynamic");
+        btnShow.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        linearLayout.addView(btnShow);
+        btnShow.setTag("tvCategory1");
+    }
+
     //this method will be called to assign buttons and text to variable
     private void assignValues(){
-        textCategory1 = (TextView)findViewById(R.id.tvCategory1);
-        textCategory2 = (TextView)findViewById(R.id.tvCategory2);
-        textCategory3 = (TextView)findViewById(R.id.tvCategory3);
-        textCategory4 = (TextView)findViewById(R.id.tvCategory4);
-        textCategory5 = (TextView)findViewById(R.id.tvCategory5);
-        textCategory6 = (TextView)findViewById(R.id.tvCategory6);
-        textCategory7 = (TextView)findViewById(R.id.tvCategory7);
-        btn_Continue = (Button)findViewById(R.id.btnContinue);
-        btn_BackHome = (Button)findViewById(R.id.btnBackToHome);
-        btn_UserInfo = (Button)findViewById(R.id.btnUserInfo);
-        btn_BackHome = (Button)findViewById(R.id.btnBackToHome);
-        btn_UserInfo = (Button)findViewById(R.id.btnUserInfo);
-        btn_RandomQuestion = (Button)findViewById(R.id.btnRandomQuestion);
+        textCategory1 = findViewById(R.id.tvCategory1);
+        textCategory2 = findViewById(R.id.tvCategory2);
+        textCategory3 = findViewById(R.id.tvCategory3);
+        textCategory4 = findViewById(R.id.tvCategory4);
+        textCategory5 = findViewById(R.id.tvCategory5);
+        textCategory6 = findViewById(R.id.tvCategory6);
+        textCategory7 = findViewById(R.id.tvCategory7);
+        textCategory8 = findViewById(R.id.tvCategory8);
+        btn_Continue = findViewById(R.id.btnContinue);
+        btn_BackHome = findViewById(R.id.btnBackToHome);
+        btn_UserInfo = findViewById(R.id.btnUserInfo);
+        btn_BackHome = findViewById(R.id.btnBackToHome);
+        btn_UserInfo = findViewById(R.id.btnUserInfo);
+        btn_RandomQuestion = findViewById(R.id.btnRandomQuestion);
+        layout = findViewById(R.id.constraintLayout);
+        linearLayout = findViewById(R.id.catLinearLayout);
 
     }
 

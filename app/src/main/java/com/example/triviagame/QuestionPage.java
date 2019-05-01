@@ -1,14 +1,17 @@
 package com.example.triviagame;
 
 import android.app.ActionBar;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -66,6 +69,7 @@ public class QuestionPage extends AppCompatActivity {
         nextQuestion();
 
         backToHome();
+
     }
 
 
@@ -125,6 +129,7 @@ public class QuestionPage extends AppCompatActivity {
         TOTAL_QUESTIONS = databaseAccess.totalQuestions();
         databaseAccess.close();
     }
+
 
 
     public void getQuestion(){
@@ -367,6 +372,8 @@ public class QuestionPage extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
+
+
 
     @Override
     public void onBackPressed() {

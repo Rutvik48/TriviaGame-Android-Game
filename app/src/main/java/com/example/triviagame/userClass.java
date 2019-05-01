@@ -1,9 +1,24 @@
 package com.example.triviagame;
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.IgnoreExtraProperties;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.ServerTimestamp;
 
 
 import java.util.Date;
+
+import static com.example.triviagame.PopUpWindow.TAG;
 
 @IgnoreExtraProperties
 public class userClass {
@@ -15,10 +30,11 @@ public class userClass {
     private int highScore;
     private String userID;
     private String documentID;
-
+    private static userClass currentUser;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
 
     public userClass(){
-
     }
 
     public userClass(String email,Date timestamp, int coin, int highScore, String userID,String documentID){
@@ -32,6 +48,39 @@ public class userClass {
 
     }
 
+    //show user highscore and email
+    public void updateUI(){
+
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference userRef = db.collection("TriviaUser");
+
+
+        Query userQuery = userRef.whereEqualTo("uid",mUser.getUid());
+        Log.d("Test1", "Document ID: ");
+        userQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+
+                    for(QueryDocumentSnapshot document: task.getResult()){
+
+                        Log.d("Test", "Document ID: " + document.getId());
+                        userClass user = document.toObject(userClass.class);
+                        //superupdateUI(user);
+                        setCurrentUser(user);
+                        //superupdateUI(user);
+                        Log.d(TAG,"display 3");
+                    }
+                }else{
+
+                }
+            }
+        });
+    }
+
     public String getEmail(){
         return Email;
     }
@@ -39,7 +88,21 @@ public class userClass {
         this.Email = email;
     }
 
+    public void setCurrentUser(userClass user){
+        currentUser = user;
+    }
 
+    public userClass getCurrentUser(){
+        return currentUser;
+    }
+
+    public void updateCoins(){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //DocumentReference docRef = db.collection("TriviaUser").document(currentUser.getUserID());
+
+        //docRef.update("Coin", currentUser.getCoin());
+    }
 
     public int getCoin(){
         return coin;

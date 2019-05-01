@@ -17,9 +17,6 @@ public class EndPage extends AppCompatActivity {
     private TextView tv_Score, tv_CoinRecived;
     private static String totalPoints;
 
-    userClass userClass = new userClass();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +46,19 @@ public class EndPage extends AppCompatActivity {
 
     private void updateCoinOnFirebase(String receivedCoins){
 
+        userClass curUser = new userClass().getCurrentUser();
+
+        Toast.makeText(getApplicationContext(),"Current User Email: "+curUser.getEmail(),Toast.LENGTH_LONG).show();
+
         int temp = Integer.parseInt(receivedCoins);
 
-        userClass userClass = new userClass();
-        int storedCoins = userClass.getCoin();
+        int storedCoins = curUser.getCoin();
 
-        userClass.setCoin(temp+storedCoins);
+        curUser.setCoin(temp+storedCoins);
+
+        tv_CoinRecived.setText(Integer.toString(curUser.getCoin()));
+
+        curUser.updateCoins();
 
     }
 

@@ -117,6 +117,7 @@ public class PopUpWindow extends Activity {
 
     public void superupdateUI(userClass user){
 
+
         Log.d(TAG,"Inside SuperUpdateUI ");
         userNameText.setText("Email: "+user.getEmail());
         userHighscoreText.setText("Highest Score: " + String.valueOf(user.getHighScore()));
@@ -142,6 +143,8 @@ public class PopUpWindow extends Activity {
 
                         Log.d("Test", "Document ID: " + document.getId());
                         userClass user = document.toObject(userClass.class);
+                        //superupdateUI(user);
+                        user.setCurrentUser(user);
                         superupdateUI(user);
                         // Log.d(TAG,"display 3");
                     }

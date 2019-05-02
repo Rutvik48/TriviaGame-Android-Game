@@ -46,10 +46,6 @@ public class HomePage extends AppCompatActivity {
         clickListner();
         changeBackground();
 
-        //this loads information from FireStore Database and adds it to userClass variables
-        userClass userClass = new userClass();
-        userClass.updateUI();
-
     }
 
     public void checkUser(){
@@ -61,6 +57,10 @@ public class HomePage extends AppCompatActivity {
         if (auth.getCurrentUser() != null){
             //if user is looged in hide the "log in/ Sign up" text
             tv_LogIn.setVisibility(View.INVISIBLE);
+
+            //this loads information from FireStore Database and adds it to userClass variables
+            userClass userClass = new userClass();
+            userClass.updateUI();
         }else{
             //when there is no user logged in, hide the UserInfo text
             btn_UserInfo.setVisibility(View.GONE);

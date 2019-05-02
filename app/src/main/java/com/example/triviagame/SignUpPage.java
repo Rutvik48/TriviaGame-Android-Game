@@ -105,7 +105,7 @@ public class SignUpPage extends AppCompatActivity {
         String email = user.getEmail();
         dataTemp.put("Email",email);
         String uid = user.getUid();
-        dataTemp.put("uid", email);
+        dataTemp.put("uid", uid);
         dataTemp.put("Coin", 0);
         dataTemp.put("Score", 0);
         temp.document(email).set(dataTemp);

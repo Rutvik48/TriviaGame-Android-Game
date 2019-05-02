@@ -56,7 +56,6 @@ public class EndPage extends AppCompatActivity {
             curUser.setHighestScore(totalPoints);
             curUser.updateHighestScore();
         }
-
     }
 
     private void updateCoinOnFirebase(String receivedCoins){

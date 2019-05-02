@@ -19,8 +19,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SignUpPage extends AppCompatActivity {
@@ -95,25 +99,16 @@ public class SignUpPage extends AppCompatActivity {
         Log.d(TAG, "added user1");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        DocumentReference newUserRef = db.collection("TriviaUser").document();
-        userClass mUser = new userClass();
+        CollectionReference temp = db.collection("TriviaUser");
 
-        mUser.setEmail(user.getEmail());
-        mUser.setUserID(user.getUid());
-        mUser.setCoin(0);
-        mUser.setHighScore(0);
-
-        newUserRef.set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Log.d(TAG, "added user");
-                }else{
-                    Log.d(TAG,"error adding user");
-                }
-            }
-        });
-
+        Map<String, Object> dataTemp = new HashMap<>();
+        String email = user.getEmail();
+        dataTemp.put("Email",email);
+        String uid = user.getUid();
+        dataTemp.put("uid", email);
+        dataTemp.put("Coin", 0);
+        dataTemp.put("Score", 0);
+        temp.document(email).set(dataTemp);
     }
 
 

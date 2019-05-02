@@ -146,6 +146,7 @@ public class PopUpWindow extends Activity {
                         //superupdateUI(user);
                         user.setCurrentUser(user);
                         superupdateUI(user);
+                        user.saveDocumentID(document.getId());
                         // Log.d(TAG,"display 3");
                     }
                 }else{
@@ -184,7 +185,6 @@ public class PopUpWindow extends Activity {
         DocumentReference newUserRef = db.collection("TriviaUser").document();
         userClass user = new userClass();
 
-
         user.setEmail(mUser.getEmail());
         user.setUserID(mUser.getUid());
         user.setCoin(0);
@@ -194,12 +194,9 @@ public class PopUpWindow extends Activity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-
                     Log.d(TAG, "added user");
                     //updateUI();
-
                 }else{
-
                     Log.d(TAG,"error adding user");
                 }
             }

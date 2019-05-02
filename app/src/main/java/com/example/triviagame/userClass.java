@@ -29,7 +29,7 @@ public class userClass {
     private int coin;
     private int highScore;
     private String userID;
-    private String documentID;
+    private static String documentID;
     private static userClass currentUser;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -58,7 +58,6 @@ public class userClass {
 
 
         Query userQuery = userRef.whereEqualTo("uid",mUser.getUid());
-        Log.d("Test1", "Document ID: ");
         userQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
             @Override
@@ -99,9 +98,14 @@ public class userClass {
     public void updateCoins(){
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        //DocumentReference docRef = db.collection("TriviaUser").document(currentUser.getUserID());
+        DocumentReference docRef = db.collection("TriviaUser").document(documentID);
 
-        //docRef.update("Coin", currentUser.getCoin());
+        docRef.update("Coin", currentUser.getCoin());
+    }
+
+    public void saveDocumentID(String docId){
+
+        documentID = docId;
     }
 
     public int getCoin(){

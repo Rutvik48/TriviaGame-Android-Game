@@ -1,6 +1,7 @@
 package com.example.triviagame;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -8,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 import com.google.firebase.firestore.Query;
@@ -17,6 +19,8 @@ import com.google.firebase.firestore.ServerTimestamp;
 
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.example.triviagame.PopUpWindow.TAG;
 
@@ -33,6 +37,9 @@ public class userClass {
     private static userClass currentUser;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+    private  Map newMap = new HashMap();
+    private static String userEmail, uID;
+    private static int highestScore, coins;
 
     public userClass(){
     }
@@ -48,36 +55,36 @@ public class userClass {
 
     }
 
-    //show user highscore and email
-    public void updateUI(){
+    public void setUserEmail(String email){
+        userEmail = email;
+    }
 
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference userRef = db.collection("TriviaUser");
+    public void setuID(String id){
+        uID = id;
+    }
 
+    public void setHighestScore(String score){
+        highestScore = Integer.parseInt(score);
+    }
 
-        Query userQuery = userRef.whereEqualTo("uid",mUser.getUid());
-        userQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void setCoins(String coin){
+        coins = Integer.parseInt(coin);
+    }
 
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
+    public String getUserEmail(){
+        return userEmail;
+    }
 
-                    for(QueryDocumentSnapshot document: task.getResult()){
+    public String getuID(){
+        return uID;
+    }
 
-                        Log.d("Test", "Document ID: " + document.getId());
-                        userClass user = document.toObject(userClass.class);
-                        //superupdateUI(user);
-                        setCurrentUser(user);
-                        //superupdateUI(user);
-                        Log.d(TAG,"display 3");
-                    }
-                }else{
+    public int getHighestScore(){
+        return highestScore;
+    }
 
-                }
-            }
-        });
+    public int getCoins(){
+        return coins;
     }
 
     public String getEmail(){
@@ -103,6 +110,56 @@ public class userClass {
         docRef.update("Coin", currentUser.getCoin());
     }
 
+
+    //show user highscore and email
+    public Map updateUI(FirebaseAuth mAuth){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("TriviaUser").document(mAuth.getCurrentUser().getEmail());
+        DocumentSnapshot document;
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        newMap = document.getData();
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+        return newMap;
+        //CollectionReference userRef = db.collection("TriviaUser");
+
+        /*Query userQuery = userRef.whereEqualTo("uid",mUser.getUid());
+        Log.d("Test1", "Document ID: ");
+        userQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+
+                    for(QueryDocumentSnapshot document: task.getResult()){
+
+                        Log.d("Test", "Document ID: " + document.getId());
+                        userClass user = document.toObject(userClass.class);
+                        //superupdateUI(user);
+                        user.setCurrentUser(user);
+                        superupdateUI(user);
+                        user.saveDocumentID(document.getId());
+                        // Log.d(TAG,"display 3");
+                    }
+                }else{
+
+                }
+            }
+        });*/
+    }
     public void saveDocumentID(String docId){
 
         documentID = docId;

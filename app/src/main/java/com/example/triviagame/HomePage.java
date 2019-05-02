@@ -46,6 +46,8 @@ public class HomePage extends AppCompatActivity {
         clickListner();
         changeBackground();
 
+        PopUpWindow popUpWindow = new PopUpWindow();
+        popUpWindow.updateUI();
     }
 
     public void checkUser(){

@@ -34,6 +34,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PopUpWindow extends Activity {
 
     //TAG to handle errors
@@ -42,8 +45,8 @@ public class PopUpWindow extends Activity {
     //variables
     private PopUpWindow popUpWindow;
     private LayoutInflater layoutInflater;
-    private TextView userNameText;
-    private TextView userHighscoreText, tv_TotalCoin;
+    private TextView tv_UserName;
+    private TextView tv_HighestScore, tv_TotalCoin;
     private Button btn_SignOut;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -51,6 +54,8 @@ public class PopUpWindow extends Activity {
     private DocumentSnapshot mLastQueriedDocument;
     private int counter = 0;
     private ConstraintLayout layout;
+    private userClass userClass = new userClass();
+    private Map dataMap;
 
     /*
      * The fireStroe query takes some time to complete so i'm thinking of adding a
@@ -85,7 +90,13 @@ public class PopUpWindow extends Activity {
 
         //check if user exits
         if(mAuth.getUid() != null) {
-            updateUI();
+
+            tv_UserName.setText("Email: "+userClass.getUserEmail());
+            Log.d(TAG, "Coins2: " + userClass.getCoins());
+            tv_TotalCoin.setText("Coins: "+Integer.toString(userClass.getCoins()));
+            tv_HighestScore.setText("Highest Score: "+ Integer.toString(userClass.getHighestScore()));
+            //updateUI();
+            Log.d(TAG,"error");
         } else{
             btn_SignOut.setText("Log Out");
             Log.d(TAG,"error");
@@ -119,8 +130,9 @@ public class PopUpWindow extends Activity {
 
 
         Log.d(TAG,"Inside SuperUpdateUI ");
-        userNameText.setText("Email: "+user.getEmail());
-        userHighscoreText.setText("Highest Score: " + String.valueOf(user.getHighScore()));
+        tv_UserName.setText("Email: "+user.getEmail());
+        Log.d(TAG, "Coins2: " + userClass.getCoins());
+        tv_HighestScore.setText("Highest Score: " + String.valueOf(user.getHighScore()));
         tv_TotalCoin.setText("Coins: "+ user.getCoin());
     }
 
@@ -128,10 +140,36 @@ public class PopUpWindow extends Activity {
     public void updateUI(){
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference userRef = db.collection("TriviaUser");
+        mAuth = FirebaseAuth.getInstance();
+        Log.d(TAG, "DocumentSnapshot data: " + mAuth);
+        DocumentReference docRef = db.collection("TriviaUser").document(mAuth.getCurrentUser().getEmail());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map newMap = new HashMap();
+                        newMap = document.getData();
+                        Log.d(TAG, "NewMap = " + newMap.get("uid"));
+                        userClass.setUserEmail(newMap.get("Email").toString());
+                        userClass.setuID(newMap.get("uid").toString());
+                        userClass.setCoins(newMap.get("Coin").toString());
+                        userClass.setHighestScore(newMap.get("Score").toString());
+                        //tv_TotalCoin.setText(newMap.get("uid").toString());
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
 
+        //CollectionReference userRef = db.collection("TriviaUser");
 
-        Query userQuery = userRef.whereEqualTo("uid",mUser.getUid());
+        /*Query userQuery = userRef.whereEqualTo("uid",mUser.getUid());
         Log.d("Test1", "Document ID: ");
         userQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
@@ -153,7 +191,7 @@ public class PopUpWindow extends Activity {
 
                 }
             }
-        });
+        });*/
     }
 
 
@@ -182,6 +220,7 @@ public class PopUpWindow extends Activity {
         Log.d(TAG, "added user1");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+
         DocumentReference newUserRef = db.collection("TriviaUser").document();
         userClass user = new userClass();
 
@@ -208,8 +247,8 @@ public class PopUpWindow extends Activity {
     private void assignVariables(){
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
-        userNameText = findViewById(R.id.tvUserName);
-        userHighscoreText = findViewById(R.id.tvHighestScore);
+        tv_UserName = findViewById(R.id.tvUserName);
+        tv_HighestScore = findViewById(R.id.tvHighestScore);
         tv_TotalCoin = findViewById(R.id.tvTotalCoin);
         btn_SignOut = findViewById(R.id.btnSignOut);
         layout = findViewById(R.id.constraintLayout);

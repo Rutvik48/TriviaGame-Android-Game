@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import static com.example.triviagame.PopUpWindow.TAG;
 
 public class EndPage extends AppCompatActivity {
 
@@ -16,6 +19,7 @@ public class EndPage extends AppCompatActivity {
     private Button btn_PlayAgain, btn_BackToCategory, btn_BackToHome, btn_UserInfo;
     private TextView tv_Score, tv_CoinRecived;
     private static String totalPoints;
+    private userClass curUser = new userClass();
 
 
     @Override
@@ -37,6 +41,8 @@ public class EndPage extends AppCompatActivity {
         btn_UserInfo.setVisibility(View.GONE);
 
         tv_Score.setText(totalPoints);
+
+        checkHighestScore();
         countCoins(Integer.parseInt(totalPoints));
 
         updateCoinOnFirebase(tv_CoinRecived.getText().toString());
@@ -44,19 +50,24 @@ public class EndPage extends AppCompatActivity {
         playAgain();
     }
 
+    private void checkHighestScore(){
+
+        if(Integer.parseInt(totalPoints) >= curUser.getHighestScore()){
+            curUser.setHighestScore(totalPoints);
+            curUser.updateHighestScore();
+        }
+
+    }
+
     private void updateCoinOnFirebase(String receivedCoins){
-
-        userClass curUser = new userClass().getCurrentUser();
-
-        Toast.makeText(getApplicationContext(),"Current User Email: "+curUser.getEmail(),Toast.LENGTH_LONG).show();
-
         int temp = Integer.parseInt(receivedCoins);
 
-        int storedCoins = curUser.getCoin();
+        int storedCoins = curUser.getCoins();
+        temp = temp + storedCoins;
+        Log.d(TAG, "GetCoins() = " + curUser.getCoins()+"   "+receivedCoins+"     "+ temp);
+        curUser.setCoins(Integer.toString(temp));
 
-        curUser.setCoin(temp+storedCoins);
-
-        tv_CoinRecived.setText(Integer.toString(curUser.getCoin()));
+        tv_CoinRecived.setText(Integer.toString(curUser.getCoins()));
 
         curUser.updateCoins();
 

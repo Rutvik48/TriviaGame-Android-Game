@@ -7,14 +7,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.IgnoreExtraProperties;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.ServerTimestamp;
 
 
@@ -105,63 +101,21 @@ public class userClass {
     public void updateCoins(){
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("TriviaUser").document(documentID);
+        DocumentReference docRef = db.collection("TriviaUser").document(getUserEmail());
 
-        docRef.update("Coin", currentUser.getCoin());
+        docRef.update("Coin", getCoins());
     }
-
-
-    //show user highscore and email
-    public Map updateUI(FirebaseAuth mAuth){
+    public void updateHighestScore(){
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("TriviaUser").document(mAuth.getCurrentUser().getEmail());
-        DocumentSnapshot document;
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        newMap = document.getData();
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-        return newMap;
-        //CollectionReference userRef = db.collection("TriviaUser");
+        DocumentReference docRef = db.collection("TriviaUser").document(getUserEmail());
 
-        /*Query userQuery = userRef.whereEqualTo("uid",mUser.getUid());
-        Log.d("Test1", "Document ID: ");
-        userQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-
-                    for(QueryDocumentSnapshot document: task.getResult()){
-
-                        Log.d("Test", "Document ID: " + document.getId());
-                        userClass user = document.toObject(userClass.class);
-                        //superupdateUI(user);
-                        user.setCurrentUser(user);
-                        superupdateUI(user);
-                        user.saveDocumentID(document.getId());
-                        // Log.d(TAG,"display 3");
-                    }
-                }else{
-
-                }
-            }
-        });*/
+        docRef.update("Score", getHighestScore());
     }
-    public void saveDocumentID(String docId){
 
+
+
+    public void saveDocumentID(String docId){
         documentID = docId;
     }
 
@@ -172,6 +126,37 @@ public class userClass {
         this.coin = coin;
     }
 
+    //show user highscore and email
+    public void updateUI() {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        Log.d(TAG, "DocumentSnapshot data: " + mAuth);
+        DocumentReference docRef = db.collection("TriviaUser").document(mAuth.getCurrentUser().getEmail());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map newMap = new HashMap();
+                        newMap = document.getData();
+                        Log.d(TAG, "NewMap = " + newMap.get("uid"));
+                        setUserEmail(newMap.get("Email").toString());
+                        setuID(newMap.get("uid").toString());
+                        setCoins(newMap.get("Coin").toString());
+                        setHighestScore(newMap.get("Score").toString());
+                        //tv_TotalCoin.setText(newMap.get("uid").toString());
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
 
     public int getHighScore(){
         return highScore;

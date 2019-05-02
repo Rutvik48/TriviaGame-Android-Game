@@ -46,8 +46,10 @@ public class HomePage extends AppCompatActivity {
         clickListner();
         changeBackground();
 
-        PopUpWindow popUpWindow = new PopUpWindow();
-        popUpWindow.updateUI();
+        //this loads information from FireStore Database and adds it to userClass variables
+        userClass userClass = new userClass();
+        userClass.updateUI();
+
     }
 
     public void checkUser(){

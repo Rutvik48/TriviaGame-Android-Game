@@ -83,7 +83,7 @@ public class PopUpWindow extends Activity {
 
         getWindow().isFloating();
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-        getWindow().setLayout((int)(wid*.8),(int)(hig*.5));
+        getWindow().setLayout((int)(wid*.8),(int)(hig*.65));
 
         HeaderClass headerClassInstance = new HeaderClass();
         headerClassInstance.setOppositeBackground(layout, getApplicationContext());
@@ -92,11 +92,8 @@ public class PopUpWindow extends Activity {
         if(mAuth.getUid() != null) {
 
             tv_UserName.setText("Email: "+userClass.getUserEmail());
-            Log.d(TAG, "Coins2: " + userClass.getCoins());
             tv_TotalCoin.setText("Coins: "+Integer.toString(userClass.getCoins()));
             tv_HighestScore.setText("Highest Score: "+ Integer.toString(userClass.getHighestScore()));
-            //updateUI();
-            Log.d(TAG,"error");
         } else{
             btn_SignOut.setText("Log Out");
             Log.d(TAG,"error");

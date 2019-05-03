@@ -32,7 +32,7 @@ public class QuestionPage extends AppCompatActivity {
     private static int TOTAL_QUESTIONS;
     private static boolean RANDOM_QUESTION;
     private ConstraintLayout layout;
-    private boolean timerRunning, isAnswerPicked;
+    private boolean timerRunning, isAnswerPicked, appForegroundStatus, timesUp;
     private CountDownTimer countDownTimer;
     private long timeLeftInMills = 6000;
     //will be used to return id answer was right or wrong
@@ -330,14 +330,19 @@ public class QuestionPage extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 timeLeftInMills = millisUntilFinished;
                 updateTimer();
+                timesUp = false;
             }
 
             @Override
             public void onFinish() {
-                EndPage endPage = new EndPage();
-                endPage.setTotalPoints(currentPoints);
-                startActivity(new Intent(getApplicationContext(),EndPage.class));
-                finish();
+                timesUp=true;
+                if(appForegroundStatus == true){
+                    EndPage endPage = new EndPage();
+                    endPage.setTotalPoints(currentPoints);
+                    startActivity(new Intent(getApplicationContext(),EndPage.class));
+                    finish();
+                }
+
             }
         }.start();
     }
@@ -378,5 +383,26 @@ public class QuestionPage extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("QuestionPage Status: ","ForeGround");
+        appForegroundStatus = true;
+        if(timesUp == true){
+            EndPage endPage = new EndPage();
+            endPage.setTotalPoints(currentPoints);
+            startActivity(new Intent(getApplicationContext(),EndPage.class));
+            finish();
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("QuestionPage Status: ","BackGround");
+        appForegroundStatus = false;
     }
 }

@@ -44,8 +44,11 @@ public class EndPage extends AppCompatActivity {
 
         checkHighestScore();
         countCoins(Integer.parseInt(totalPoints));
+        if(curUser.getEmail() != null){
+            updateCoinOnFirebase(tv_CoinRecived.getText().toString());
+        }
 
-        updateCoinOnFirebase(tv_CoinRecived.getText().toString());
+
 
         playAgain();
     }

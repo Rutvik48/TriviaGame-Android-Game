@@ -106,11 +106,14 @@ public class userClass {
         docRef.update("Coin", getCoins());
     }
     public void updateHighestScore(){
+        mAuth = FirebaseAuth.getInstance();
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("TriviaUser").document(getUserEmail());
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection("TriviaUser").document(getUserEmail());
 
-        docRef.update("Score", getHighestScore());
+            docRef.update("Score", getHighestScore());
+        }
     }
 
 

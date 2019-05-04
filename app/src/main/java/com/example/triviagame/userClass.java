@@ -1,20 +1,18 @@
 package com.example.triviagame;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.IgnoreExtraProperties;
-import com.google.firebase.firestore.ServerTimestamp;
-
-
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,136 +21,124 @@ import static com.example.triviagame.PopUpWindow.TAG;
 @IgnoreExtraProperties
 public class userClass {
 
-
-    private String Email;
-    private @ServerTimestamp Date timestamp;
-    private int coin;
-    private int highScore;
-    private String userID;
-    private static String documentID;
-    private static userClass currentUser;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
+    public FirebaseAuth mAuth;
+    public  FirebaseFirestore db;
     private  Map newMap = new HashMap();
     private static String userEmail, uID;
     private static int highestScore, coins;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor prefEditor;
+    public final String FIRESTORE_USER_EMAIL = "Email";
+    public final String FIRESTORE_USER_ID = "UserID";
+    public final String FIRESTORE_COINS = "Coins";
+    public final String FIRESTORE_HEIGHEST_SCORE = "Score";
 
-    public userClass(){
+
+    public userClass (){
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+    }
+    public userClass(Context context){
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        prefEditor = sharedPreferences.edit();
+
     }
 
-    public userClass(String email,Date timestamp, int coin, int highScore, String userID,String documentID){
 
-        this.Email = email;
-        this.timestamp = timestamp;
-        this.coin = coin;
-        this.highScore = highScore;
-        this.userID = userID;
-        this.documentID = documentID;
+    public void setUpSharedPreferences(int prefBackground, Context context){
 
+        prefEditor.putInt("Background", prefBackground);
+        prefEditor.apply();
+
+    }
+
+    public void assignUserFields(String email, String userID){
+
+        setUserEmail(email);
+        setuID(userID);
+        setCoins(0);
+        setHighestScore(0);
+    }
+
+    public void emptyUserFields(){
+        assignUserFields(null, null);
     }
 
     public void setUserEmail(String email){
+
         userEmail = email;
+        prefEditor.putString(FIRESTORE_USER_EMAIL, email);
+        prefEditor.apply();
+
     }
 
     public void setuID(String id){
         uID = id;
+        prefEditor.putString(FIRESTORE_USER_ID, id);
+        prefEditor.apply();
     }
 
-    public void setHighestScore(String score){
-        highestScore = Integer.parseInt(score);
+    public void setHighestScore(int score){
+        highestScore = score;
+        prefEditor.putInt(FIRESTORE_HEIGHEST_SCORE, score);
+        prefEditor.apply();
     }
 
-    public void setCoins(String coin){
-        coins = Integer.parseInt(coin);
+    public void setCoins(int coin){
+        coins = coin;
+        prefEditor.putInt(FIRESTORE_COINS, coin);
+        prefEditor.apply();
     }
 
     public String getUserEmail(){
-        return userEmail;
+        return sharedPreferences.getString(FIRESTORE_USER_EMAIL, "");
     }
 
     public String getuID(){
-        return uID;
+        return sharedPreferences.getString(FIRESTORE_USER_ID, "");
     }
 
     public int getHighestScore(){
-        return highestScore;
+        return sharedPreferences.getInt(FIRESTORE_HEIGHEST_SCORE, 0);
     }
 
     public int getCoins(){
-        return coins;
+        return sharedPreferences.getInt(FIRESTORE_COINS, 0);
     }
 
-    public String getEmail(){
-        return Email;
-    }
-    public void setEmail(String email){
-        this.Email = email;
-    }
-
-    public void setCurrentUser(userClass user){
-        currentUser = user;
-    }
-
-    public userClass getCurrentUser(){
-        return currentUser;
-    }
 
     public void updateCoins(){
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("TriviaUser").document(getUserEmail());
 
-        docRef.update("Coin", getCoins());
+        docRef.update(FIRESTORE_COINS, getCoins());
     }
     public void updateHighestScore(){
-        mAuth = FirebaseAuth.getInstance();
 
         if (mAuth.getCurrentUser() != null) {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
             DocumentReference docRef = db.collection("TriviaUser").document(getUserEmail());
 
-            docRef.update("Score", getHighestScore());
+            docRef.update(FIRESTORE_HEIGHEST_SCORE, getHighestScore());
         }
-    }
-
-
-
-    public void saveDocumentID(String docId){
-        documentID = docId;
-    }
-
-    public int getCoin(){
-        return coin;
-    }
-    public void setCoin(int coin){
-        this.coin = coin;
     }
 
     //show user highscore and email
     public void updateUI() {
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        mAuth = FirebaseAuth.getInstance();
-        Log.d(TAG, "DocumentSnapshot data: " + mAuth);
         DocumentReference docRef = db.collection("TriviaUser").document(mAuth.getCurrentUser().getEmail());
+
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Map newMap = new HashMap();
                         newMap = document.getData();
-                        Log.d(TAG, "NewMap = " + newMap.get("uid"));
-                        setUserEmail(newMap.get("Email").toString());
-                        setuID(newMap.get("uid").toString());
-                        setCoins(newMap.get("Coin").toString());
-                        setHighestScore(newMap.get("Score").toString());
-                        //tv_TotalCoin.setText(newMap.get("uid").toString());
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        getDataFromMap();
                     } else {
-                        Log.d(TAG, "No such document");
+                        Log.d(TAG, "No such document found");
                     }
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
@@ -161,22 +147,21 @@ public class userClass {
         });
     }
 
-    public int getHighScore(){
-        return highScore;
-    }
-    public void setHighScore(int highScore){
-        this.highScore = highScore;
-    }
+    private void getDataFromMap(){
 
-    public String getUserID(){
-        return userID;
-    }
-    public  void setUserID(String userID){
-        this.userID = userID;
-    }
+        setUserEmail(newMap.get(FIRESTORE_USER_EMAIL).toString());
+        setuID(newMap.get(FIRESTORE_USER_ID).toString());
 
-    public String getDocumentID(){return documentID;}
-    public void setDocumentID(){this.documentID = userID;}
+        int coins = Integer.parseInt(newMap.get(FIRESTORE_COINS).toString());
+        if(getCoins() > coins )
+            setCoins(coins);
+        else
+            updateCoins();
 
-    public Date getTimestamp(){return timestamp;}
+        int score = Integer.parseInt(newMap.get(FIRESTORE_HEIGHEST_SCORE).toString());
+        if(getHighestScore() > score)
+            setHighestScore(score);
+        else
+            updateHighestScore();
+    }
 }

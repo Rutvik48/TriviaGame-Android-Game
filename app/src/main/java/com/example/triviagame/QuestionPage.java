@@ -34,7 +34,7 @@ public class QuestionPage extends AppCompatActivity {
     private ConstraintLayout layout;
     private boolean timerRunning, isAnswerPicked, appForegroundStatus, timesUp;
     private CountDownTimer countDownTimer;
-    private long timeLeftInMills = 6000;
+    private long timeLeftInMills = 45000;
     //will be used to return id answer was right or wrong
     boolean homeCondition;
     //category in order of 1.Science & Nature, 2.Science: Computers, 3.General Knowledge
@@ -169,6 +169,34 @@ public class QuestionPage extends AppCompatActivity {
 
     }
 
+    private String[] randomizeOptions(String[] anArray){
+
+        boolean loopCondition = true;
+        String []optionsArray = new String[4];
+        Random random = new Random();
+        int counter = 0;
+
+        int rand = random.nextInt(4);
+        for (int i = 0; i<4; i++){
+            optionsArray[i] = anArray[rand%4];
+            rand++;
+        }
+        /*while(loopCondition){
+
+            int rand = random.nextInt(4);
+
+            Log.d("TempArrayAfter Func",Integer.toString(rand));
+            if(optionsArray[rand] == null){
+                optionsArray[counter] = anArray[rand];
+                if(counter >= 3)
+                    loopCondition = false;
+                counter++;
+            }
+        }*/
+
+        return optionsArray;
+    }
+
     private void hideNextQuestionBtn(){
 
         //by making this boolean false user can select an option
@@ -189,10 +217,19 @@ public class QuestionPage extends AppCompatActivity {
         tv_Question.setText(array[0]);
         tv_Category.setText(array[6]);
         rightAnswer = array[5].trim();
-        btn_Option1.setText(array[1].trim());
-        btn_Option2.setText(array[2].trim());
-        btn_Option3.setText(array[3].trim());
-        btn_Option4.setText(array[4].trim());
+
+
+        String tempArray[] = new String[4];
+        for(int i = 0; i<4;i++)
+            tempArray[i] = array[i+1];
+        Log.d("TempArrayBefore Func",tempArray[0]);
+
+        tempArray = randomizeOptions(tempArray);
+        Log.d("TempArrayAfter Func",tempArray[0]);
+        btn_Option1.setText(tempArray[0].trim());
+        btn_Option2.setText(tempArray[1].trim());
+        btn_Option3.setText(tempArray[2].trim());
+        btn_Option4.setText(tempArray[3].trim());
     }
 
     private void clickedOption(){

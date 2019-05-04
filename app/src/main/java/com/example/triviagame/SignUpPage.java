@@ -66,7 +66,7 @@ public class SignUpPage extends AppCompatActivity {
                     Log.d(TAG, "createUserWithEmail:success");
                     FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                    updateUI(user);
+                    createUserFieldOnFireStore(user);
                 }else{
                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     Toast.makeText(SignUpPage.this,"Could not register", Toast.LENGTH_SHORT).show();
@@ -94,21 +94,25 @@ public class SignUpPage extends AppCompatActivity {
     }
 //update the ui or send user to different activity
 
-    public void updateUI(FirebaseUser user){
+    public void createUserFieldOnFireStore(FirebaseUser user){
 
         Log.d(TAG, "added user1");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        userClass userClass = new userClass(getApplicationContext());
         CollectionReference temp = db.collection("TriviaUser");
 
         Map<String, Object> dataTemp = new HashMap<>();
         String email = user.getEmail();
-        dataTemp.put("Email",email);
+        dataTemp.put(userClass.FIRESTORE_USER_EMAIL,email);
         String uid = user.getUid();
-        dataTemp.put("uid", uid);
-        dataTemp.put("Coin", 0);
-        dataTemp.put("Score", 0);
+        dataTemp.put(userClass.FIRESTORE_USER_ID, uid);
+        dataTemp.put(userClass.FIRESTORE_COINS, 0);
+        dataTemp.put(userClass.FIRESTORE_HEIGHEST_SCORE, 0);
         temp.document(email).set(dataTemp);
+
+
+        userClass.assignUserFields(email,uid);
     }
 
 

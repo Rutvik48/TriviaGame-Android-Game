@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.12" />
+        app:layout_constraintGuide_percent="0.10" />
 
     <android.support.constraint.Guideline
         android:id="@+id/topHorGuideline11"
@@ -124,6 +124,7 @@
         android:layout_marginBottom="8dp"
         android:background="@android:drawable/screen_background_light_transparent"
         android:text="Button"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/topHorGuideline3"
         app:layout_constraintEnd_toStartOf="@+id/endVerGuideline"
         app:layout_constraintStart_toStartOf="parent"
@@ -141,6 +142,7 @@
         android:layout_marginBottom="8dp"
         android:background="@android:drawable/screen_background_light_transparent"
         android:text="Button"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/topHorGuideline3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/endVerGuideline"
@@ -158,6 +160,7 @@
         android:layout_marginBottom="8dp"
         android:background="@android:drawable/screen_background_light_transparent"
         android:text="Button"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/topHorGuideline4"
         app:layout_constraintEnd_toStartOf="@+id/endVerGuideline"
         app:layout_constraintStart_toStartOf="parent"
@@ -175,6 +178,7 @@
         android:layout_marginBottom="8dp"
         android:background="@android:drawable/screen_background_light_transparent"
         android:text="Button"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/topHorGuideline4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/endVerGuideline"
@@ -198,6 +202,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/topHorGuideline1" />
+
+    <TextView
+        android:id="@+id/tvTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="50"
+        android:background="@android:color/transparent"
+        android:fontFamily="cursive"
+        android:text="01:00"
+        android:textAlignment="viewStart"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#FF096164"
+        android:textSize="30sp"
+        android:typeface="serif"
+        app:layout_constraintBottom_toTopOf="@+id/divider2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
@@ -234,28 +265,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/tvTimer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="01:00"
-            android:layout_gravity="start"
-            android:layout_weight="50"
-            android:background="@android:color/transparent"
-            android:fontFamily="cursive"
-            android:textAlignment="viewStart"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="#FF096164"
-            android:textSize="26sp"
-            android:typeface="serif"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvSkipQuestion"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btnNextQuestion"

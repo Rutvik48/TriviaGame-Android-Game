@@ -59,7 +59,7 @@ public class HomePage extends AppCompatActivity {
             tv_LogIn.setVisibility(View.INVISIBLE);
 
             //this loads information from FireStore Database and adds it to userClass variables
-            userClass userClass = new userClass();
+            userClass userClass = new userClass(getApplicationContext());
             userClass.updateUI();
         }else{
             //when there is no user logged in, hide the UserInfo text

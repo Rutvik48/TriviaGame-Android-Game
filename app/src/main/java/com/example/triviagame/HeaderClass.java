@@ -14,7 +14,7 @@ import android.widget.Button;
 
 public class HeaderClass extends AppCompatActivity {
 
-    public final static String GAME_NAME = "Trivia Game";
+    public final static String GAME_NAME = "Trivia RUSH!";
     public static final String DATABASE_NAME = "GameDatabase.db";
     public static final String TABLE_NAME = "TRIVIA_QUESTIONS";
     public static final String CATEGORY_COL = "Category";
@@ -25,8 +25,6 @@ public class HeaderClass extends AppCompatActivity {
     public static final String OPTION4_COL = "Option4";
     public static final String CORRECT_ANS_COL = "correct_answer";
     public static final String ID_COL = "ID";
-
-
 
 
     //"R.drawable.background_gradient" this have integer value and BACKGROUND 1 is default
@@ -66,14 +64,19 @@ public class HeaderClass extends AppCompatActivity {
     }
 
     public void setBackground( ConstraintLayout layout, Context context) {
+
         this.backgroundPref = PreferenceManager.getDefaultSharedPreferences(context);
         prefEditor = backgroundPref.edit();
 
         int backgroundNum1 = backgroundPref.getInt("Background", 0);
         if(backgroundNum1 != 0 ){
             layout.setBackgroundResource(backgroundNum1);
+        }else{
+            layout.setBackgroundResource(BACKGROUND1);
+            saveBackground(BACKGROUND1, context);
         }
     }
+
 
     public void setOppositeBackground(ConstraintLayout layout, Context context){
         this.backgroundPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -86,13 +89,6 @@ public class HeaderClass extends AppCompatActivity {
             else
                 layout.setBackgroundResource(BACKGROUND1);
         }
-    }
-    public void saveBackground(int prefBackground){
-        this.backgroundPref = PreferenceManager.getDefaultSharedPreferences(HeaderClass.this);
-        prefEditor = backgroundPref.edit();
-
-        prefEditor.putInt("Background", prefBackground);
-        prefEditor.apply();
     }
 
     public int getCurBackground(Context context){

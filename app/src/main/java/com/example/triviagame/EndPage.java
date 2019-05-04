@@ -19,7 +19,7 @@ public class EndPage extends AppCompatActivity {
     private Button btn_PlayAgain, btn_BackToCategory, btn_BackToHome, btn_UserInfo;
     private TextView tv_Score, tv_CoinRecived;
     private static String totalPoints;
-    private userClass curUser = new userClass();
+    private userClass curUser;
 
 
     @Override
@@ -28,6 +28,7 @@ public class EndPage extends AppCompatActivity {
         setContentView(R.layout.activity_end_page);
         setFullScreen();
 
+        curUser = new userClass(getApplicationContext());
         // this will assign variables to button, text, etc from xml file
         assignVariables();
 
@@ -44,7 +45,7 @@ public class EndPage extends AppCompatActivity {
 
         checkHighestScore();
         countCoins(Integer.parseInt(totalPoints));
-        if(curUser.getEmail() != null){
+        if(curUser.getUserEmail() != null){
             updateCoinOnFirebase(tv_CoinRecived.getText().toString());
         }
 
@@ -56,7 +57,7 @@ public class EndPage extends AppCompatActivity {
     private void checkHighestScore(){
 
         if(Integer.parseInt(totalPoints) >= curUser.getHighestScore()){
-            curUser.setHighestScore(totalPoints);
+            curUser.setHighestScore(Integer.parseInt(totalPoints));
             curUser.updateHighestScore();
         }
     }
@@ -67,7 +68,7 @@ public class EndPage extends AppCompatActivity {
         int storedCoins = curUser.getCoins();
         temp = temp + storedCoins;
         Log.d(TAG, "GetCoins() = " + curUser.getCoins()+"   "+receivedCoins+"     "+ temp);
-        curUser.setCoins(Integer.toString(temp));
+        curUser.setCoins(temp);
 
         tv_CoinRecived.setText(Integer.toString(curUser.getCoins()));
 

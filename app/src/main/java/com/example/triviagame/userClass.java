@@ -1,11 +1,11 @@
 package com.example.triviagame;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -112,17 +112,20 @@ public class userClass {
 
     public void updateCoins(){
 
-        if (mAuth.getCurrentUser() != null) {
-            DocumentReference docRef = db.collection("TriviaUser").document(getUserEmail());
-            docRef.update(FIRESTORE_COINS, getCoins());
-        }
+        updateData(FIRESTORE_COINS, getCoins());
     }
     public void updateHighestScore(){
 
+        updateData(FIRESTORE_HEIGHEST_SCORE, getHighestScore());
+    }
+
+    private void updateData(String dataName, int data){
+
         if (mAuth.getCurrentUser() != null) {
             DocumentReference docRef = db.collection("TriviaUser").document(getUserEmail());
-            docRef.update(FIRESTORE_HEIGHEST_SCORE, getHighestScore());
+            docRef.update(dataName, data);
         }
+
     }
 
     //show user highscore and email

@@ -2,6 +2,7 @@ package com.example.triviagame;
 
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +31,8 @@ public class CategoriesPage extends AppCompatActivity {
     public static int []selectedCategories;
     private ConstraintLayout layout;
     private LinearLayout linearLayout;
+
+    private MediaPlayer mpRandom,mpCat,mpSwoosh;
     //private QuestionPage questionPage = new QuestionPage();
 
     @Override
@@ -54,6 +57,23 @@ public class CategoriesPage extends AppCompatActivity {
         headerClassInstance.setBackground(layout, getApplicationContext());
 
         //CreateButton();
+    }
+
+
+    //stop the Media to free up resources
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mpSwoosh.stop();
+        mpSwoosh.stop();
+
+
+        mpCat.stop();
+        mpCat.release();
+
+        mpRandom.stop();
+        mpRandom.release();
     }
 
     private void setCategoryNames(){
@@ -92,11 +112,12 @@ public class CategoriesPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getSlectedCategories();
-
+                mpRandom.start();
                 QuestionPage questionPage = new QuestionPage();
                 questionPage.setRandomQuestionFalse();
                 Intent intent = new Intent(CategoriesPage.this, QuestionPage.class);
                 startActivity(intent);
+
                 finish();
             }
         });
@@ -106,6 +127,7 @@ public class CategoriesPage extends AppCompatActivity {
                 //user info will be shown
                 Intent intent = new Intent(CategoriesPage.this, PopUpWindow.class);
                 startActivity(intent);
+                mpSwoosh.start();
             }
         });
 
@@ -114,6 +136,7 @@ public class CategoriesPage extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(CategoriesPage.this, HomePage.class);
                 startActivity(intent);
+                mpCat.start();
                 finish();
             }
         });
@@ -123,6 +146,7 @@ public class CategoriesPage extends AppCompatActivity {
             public void onClick(View v) {
                 categoryState1 = setTextState(textCategory1,categoryState1);
                 checkCategoryState();
+                mpCat.start();
                 //categoryState1 = true;
             }
         });
@@ -132,6 +156,7 @@ public class CategoriesPage extends AppCompatActivity {
             public void onClick(View v) {
                 categoryState2 = setTextState(textCategory2,categoryState2);
                 checkCategoryState();
+                mpCat.start();
                 //categoryState2 = true;
             }
         });
@@ -141,6 +166,7 @@ public class CategoriesPage extends AppCompatActivity {
             public void onClick(View v) {
                 categoryState3 = setTextState(textCategory3,categoryState3);
                 checkCategoryState();
+                mpCat.start();
                 //categoryState3 = true;
             }
         });
@@ -150,6 +176,7 @@ public class CategoriesPage extends AppCompatActivity {
             public void onClick(View v) {
                 categoryState4 = setTextState(textCategory4,categoryState4);
                 checkCategoryState();
+                mpCat.start();
             }
         });
 
@@ -158,6 +185,7 @@ public class CategoriesPage extends AppCompatActivity {
             public void onClick(View v) {
                 categoryState5 = setTextState(textCategory5,categoryState5);
                 checkCategoryState();
+                mpCat.start();
             }
         });
 
@@ -166,6 +194,7 @@ public class CategoriesPage extends AppCompatActivity {
             public void onClick(View v) {
                 categoryState6 = setTextState(textCategory6,categoryState6);
                 checkCategoryState();
+                mpCat.start();
             }
         });
 
@@ -174,6 +203,7 @@ public class CategoriesPage extends AppCompatActivity {
             public void onClick(View v) {
                 categoryState7 = setTextState(textCategory7,categoryState7);
                 checkCategoryState();
+                mpCat.start();
             }
         });
 
@@ -182,6 +212,7 @@ public class CategoriesPage extends AppCompatActivity {
             public void onClick(View v) {
                 categoryState8 = setTextState(textCategory8,categoryState8);
                 checkCategoryState();
+                mpCat.start();
             }
         });
     }
@@ -291,6 +322,9 @@ public class CategoriesPage extends AppCompatActivity {
 
     //this method will be called to assign buttons and text to variable
     private void assignValues(){
+        mpSwoosh = MediaPlayer.create(this,R.raw.swoosh);
+        mpRandom = MediaPlayer.create(this,R.raw.buttonpress);
+        mpCat = MediaPlayer.create(this,R.raw.buttontoggle);
         textCategory1 = findViewById(R.id.tvCategory1);
         textCategory2 = findViewById(R.id.tvCategory2);
         textCategory3 = findViewById(R.id.tvCategory3);

@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service android:enabled="true" android:name=".BackgroundSoundService" />
         <activity android:name=".EndPage"></activity>
         <activity android:name=".ResetPasswordActivity" />
         <activity android:name=".QuestionPage" />

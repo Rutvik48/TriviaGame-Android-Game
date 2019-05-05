@@ -38,12 +38,13 @@ public class userClass {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
     }
+
+
     public userClass(Context context){
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         prefEditor = sharedPreferences.edit();
-
     }
 
 
@@ -111,15 +112,15 @@ public class userClass {
 
     public void updateCoins(){
 
-        DocumentReference docRef = db.collection("TriviaUser").document(getUserEmail());
-
-        docRef.update(FIRESTORE_COINS, getCoins());
+        if (mAuth.getCurrentUser() != null) {
+            DocumentReference docRef = db.collection("TriviaUser").document(getUserEmail());
+            docRef.update(FIRESTORE_COINS, getCoins());
+        }
     }
     public void updateHighestScore(){
 
         if (mAuth.getCurrentUser() != null) {
             DocumentReference docRef = db.collection("TriviaUser").document(getUserEmail());
-
             docRef.update(FIRESTORE_HEIGHEST_SCORE, getHighestScore());
         }
     }

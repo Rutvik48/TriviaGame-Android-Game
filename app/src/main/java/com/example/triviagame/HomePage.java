@@ -23,7 +23,6 @@ public class HomePage extends AppCompatActivity {
     private ConstraintLayout layout;
     //to exit the app this condition will be used
     private Boolean exitCondition = false;
-
     private FirebaseAuth auth;
 
     HeaderClass headerClassInstance = new HeaderClass();

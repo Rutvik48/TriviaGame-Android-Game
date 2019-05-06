@@ -65,8 +65,10 @@ public class SignUpPage extends AppCompatActivity {
                     Toast.makeText(SignUpPage.this,"Registered Successfully", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "createUserWithEmail:success");
                     FirebaseUser user = firebaseAuth.getCurrentUser();
-
                     createUserFieldOnFireStore(user);
+                    Intent intent = new Intent(SignUpPage.this,HomePage.class);
+                    startActivity(intent);
+                    finish();
                 }else{
                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     Toast.makeText(SignUpPage.this,"Could not register", Toast.LENGTH_SHORT).show();

@@ -1,6 +1,7 @@
 package com.example.triviagame;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class EndPage extends AppCompatActivity {
     private TextView tv_Score, tv_CoinRecived;
     private static String totalPoints;
     private userClass curUser;
+    private MediaPlayer mpButton,mpWin,mpMusic;
 
 
     @Override
@@ -50,7 +52,7 @@ public class EndPage extends AppCompatActivity {
         }
 
 
-
+        mpWin.start();
         playAgain();
     }
 
@@ -84,28 +86,28 @@ public class EndPage extends AppCompatActivity {
 
         if(points>160)
             tv_CoinRecived.setText("11");
-        //points between 151 to 160
+            //points between 151 to 160
         else if(points>150)
             tv_CoinRecived.setText("10");
-        //points between 141 to 150
+            //points between 141 to 150
         else if(points>140)
             tv_CoinRecived.setText("09");
-        //points between 131 to 140
+            //points between 131 to 140
         else if(points>130)
             tv_CoinRecived.setText("08");
-        //points between 121 to 130
+            //points between 121 to 130
         else if(points>120)
             tv_CoinRecived.setText("07");
-        //points between 111 to 120
+            //points between 111 to 120
         else if(points>110)
             tv_CoinRecived.setText("06");
-        //points between 101 to 110
+            //points between 101 to 110
         else if(points>100)
             tv_CoinRecived.setText("05");
-        //points between 81 to 100
+            //points between 81 to 100
         else if(points>80)
             tv_CoinRecived.setText("04");
-        //points between 50 to 80
+            //points between 50 to 80
         else if(points>=50)
             tv_CoinRecived.setText("02");
         else
@@ -118,6 +120,7 @@ public class EndPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), QuestionPage.class));
+                mpButton.start();
                 finish();
             }
         });
@@ -130,6 +133,9 @@ public class EndPage extends AppCompatActivity {
             public void onClick(View v) {
 
                 startActivity(new Intent(getApplicationContext(), HomePage.class));
+
+                mpButton.start();
+                finish();
             }
         });
     }
@@ -141,13 +147,26 @@ public class EndPage extends AppCompatActivity {
             public void onClick(View v) {
 
                 startActivity(new Intent(getApplicationContext(),CategoriesPage.class));
+                mpButton.start();
                 finish();
             }
         });
     }
 
+    //stop the Media to free up resources
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mpMusic.stop();
+        mpMusic.release();
+
+    }
+
     private void assignVariables(){
 
+        mpMusic = MediaPlayer.create(this,R.raw.bensoundepic);
+        mpButton = MediaPlayer.create(this,R.raw.buttonpress);
+        mpWin = MediaPlayer.create(this,R.raw.win);
         layout = findViewById(R.id.layout);
         btn_PlayAgain = findViewById(R.id.btnPlayAgain);
         btn_BackToCategory = findViewById(R.id.btnBackToCategory);

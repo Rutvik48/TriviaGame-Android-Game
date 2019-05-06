@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.support.constraint.ConstraintLayout;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -25,6 +26,7 @@ public class PopUpWindow extends Activity {
     private ConstraintLayout layout;
     private userClass userClass;
 
+    private MediaPlayer mpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,7 @@ public class PopUpWindow extends Activity {
         btn_SignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mpButton.start();
                 if (userClass.mAuth.getUid() != null){
                     userClass.mAuth.signOut();
                     btn_SignOut.setText("Log In");
@@ -98,6 +101,7 @@ public class PopUpWindow extends Activity {
 
     private void assignVariables(){
 
+        mpButton = MediaPlayer.create(this,R.raw.buttonpress);
         tv_UserName = findViewById(R.id.tvUserName);
         tv_HighestScore = findViewById(R.id.tvHighestScore);
         tv_TotalCoin = findViewById(R.id.tvTotalCoin);

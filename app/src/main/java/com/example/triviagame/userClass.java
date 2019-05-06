@@ -76,6 +76,7 @@ public class userClass {
     }
 
     public void setuID(String id){
+
         uID = id;
         prefEditor.putString(FIRESTORE_USER_ID, id);
         prefEditor.apply();
@@ -156,11 +157,20 @@ public class userClass {
         setUserEmail(newMap.get(FIRESTORE_USER_EMAIL).toString());
         setuID(newMap.get(FIRESTORE_USER_ID).toString());
 
+        //get coins stored on firebase
         int coins = Integer.parseInt(newMap.get(FIRESTORE_COINS).toString());
+
+        /*
+        * checks if current user coins are higher then firebase coins
+        * current user coins will be higher when user played the game offline
+        * the if statement will update it when user connects to internet
+        * this also ensure that, someone can't just increase numbers of coins on database,
+         * if someone does else statement will change it back to right number of coins */
         if(getCoins() > coins )
             setCoins(coins);
-        else
-            updateCoins();
+        else{
+            setCoins(coins);
+            updateCoins();}
 
         int score = Integer.parseInt(newMap.get(FIRESTORE_HEIGHEST_SCORE).toString());
         if(getHighestScore() > score)

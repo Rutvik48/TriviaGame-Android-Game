@@ -2,6 +2,7 @@ package com.example.triviagame;
 
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,7 +24,11 @@ public class HomePage extends AppCompatActivity {
     private ConstraintLayout layout;
     //to exit the app this condition will be used
     private Boolean exitCondition = false;
+
     private FirebaseAuth auth;
+
+    private MediaPlayer mpPlayGame,mpHigh,mpBackground;
+
 
     HeaderClass headerClassInstance = new HeaderClass();
 
@@ -44,6 +49,23 @@ public class HomePage extends AppCompatActivity {
 
         clickListner();
         changeBackground();
+        mpBackground.start();
+
+    }
+
+    //stop the Media to free up resources
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mpBackground.stop();
+        mpBackground.release();
+
+        mpHigh.stop();
+        mpHigh.release();
+
+
+        mpPlayGame.stop();
+        mpPlayGame.release();
 
     }
 
@@ -89,6 +111,8 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), PopUpWindow.class));
+                mpHigh.start();
+
             }
         });
 
@@ -96,6 +120,8 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),CategoriesPage.class));
+                mpPlayGame.start();
+
                 finish();
             }
         });
@@ -104,6 +130,7 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), LogInPage.class));
+                mpHigh.start();
                 finish();
             }
         });
@@ -114,6 +141,7 @@ public class HomePage extends AppCompatActivity {
         tv_ChangeBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mpHigh.start();
                 int backgroundNum = headerClassInstance.getCurBackground(getApplicationContext());
 
                 int temp = headerClassInstance.chnageBackground(backgroundNum, layout);
@@ -139,6 +167,10 @@ public class HomePage extends AppCompatActivity {
     //function to assign buttons and texts to java variables
     private void assignVariables(){
 
+        mpBackground = MediaPlayer.create(this,R.raw.jazzyfrenchy);
+        mpBackground.setLooping(true);
+        mpPlayGame = MediaPlayer.create(this,R.raw.buttonpress);
+        mpHigh = MediaPlayer.create(this,R.raw.swoosh);
         btn_GameStart = findViewById(R.id.btnGameStart);
         tv_LogIn = findViewById(R.id.tvLogIn);
         btn_BackHome = findViewById(R.id.btnBackToHome);

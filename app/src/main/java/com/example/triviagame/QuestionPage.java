@@ -5,6 +5,8 @@ import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
@@ -24,11 +26,11 @@ import java.util.Random;
 
 public class QuestionPage extends AppCompatActivity {
 
-    private TextView tv_Question, tv_Timer, tv_Category ;
+    private TextView tv_Question, tv_Timer, tv_Category, tv_SkipQuestion;
     private Button btn_Option1,btn_Option2,btn_Option3,btn_Option4, btn_ScorePoints, btn_BackToHome, btn_NextQuestion;
     private String option1, option2, option3, option4, rightAnswer;
     private int currentPoints = 0;
-    private int skippedQuestions = 0;
+    private int currentCoins;
     private static int TOTAL_QUESTIONS;
     private static boolean RANDOM_QUESTION;
     private ConstraintLayout layout;
@@ -44,6 +46,9 @@ public class QuestionPage extends AppCompatActivity {
     private int []selectedCategories;
     private int numberOfCategories = 8;
     private CategoriesPage categoriesPage = new CategoriesPage();
+
+    private userClass user;
+    private MediaPlayer mpWrong,mpCorrect,mpSkip,mpSwoosh,mpMusic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,7 @@ public class QuestionPage extends AppCompatActivity {
         HeaderClass headerClassInstance = new HeaderClass();
         headerClassInstance.setBackground(layout, getApplicationContext());
 
+        user = new userClass(getApplicationContext());
 
         clickedOption();
 
@@ -70,9 +76,47 @@ public class QuestionPage extends AppCompatActivity {
 
         backToHome();
 
+        skipQuestion();
+
+
     }
 
 
+    //this function is to check if user can skip a question
+    private void skipQuestion(){
+
+        currentCoins = user.getCoins();
+
+        if (currentCoins <= 0){
+            tv_SkipQuestion.setText("Earn coins to skip");
+            tv_SkipQuestion.setTypeface(Typeface.SANS_SERIF, Typeface.ITALIC);
+        }
+
+        //this stores the number of coins user has
+        int currentCoin = user.getCoins();
+        Log.d("Number of coins ", Integer.toString(user.getCoins()));
+
+        tv_SkipQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //this stores the number of coins user has
+                int currentCoin = user.getCoins();
+
+                //if user doesn't have at lease one coin, user can't skip a question
+                if(currentCoin >0){
+                    currentCoin = currentCoin-1;
+                    user.setCoins(currentCoin);
+                    user.updateCoins();
+                    showNextQuestion();
+                }
+
+                if(currentCoin <= 0 ){
+                    tv_SkipQuestion.setText("Earn coins to skip");
+                }
+            }
+        });
+
+    }
 
     private void backToHome(){
 
@@ -182,9 +226,7 @@ public class QuestionPage extends AppCompatActivity {
             rand++;
         }
         /*while(loopCondition){
-
             int rand = random.nextInt(4);
-
             Log.d("TempArrayAfter Func",Integer.toString(rand));
             if(optionsArray[rand] == null){
                 optionsArray[counter] = anArray[rand];
@@ -279,10 +321,12 @@ public class QuestionPage extends AppCompatActivity {
             if (rightAnswer.equals(clickedBtn.getText())){
                 clickedBtn.setTextColor(Color.GREEN);
                 addPoint();
+                mpCorrect.start();
             }else{
                 clickedBtn.setTextColor(Color.RED);
                 deductPoint();
                 showRightAnswer();
+                mpWrong.start();
             }
 
         }
@@ -306,11 +350,15 @@ public class QuestionPage extends AppCompatActivity {
         btn_NextQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getQuestion();
-                resetOptionColor();
-                startTimer();
+                showNextQuestion();
             }
         });
+    }
+
+    private void showNextQuestion(){
+        getQuestion();
+        resetOptionColor();
+        startTimer();
     }
 
     private void resetOptionColor(){
@@ -331,14 +379,21 @@ public class QuestionPage extends AppCompatActivity {
     }
 
     public void assignValues(){
+        mpMusic = MediaPlayer.create(this,R.raw.bensoundepic);
+        mpCorrect = MediaPlayer.create(this,R.raw.correct);
+        mpWrong = MediaPlayer.create(this,R.raw.wronganswer);
+        mpSwoosh = MediaPlayer.create(this,R.raw.swoosh);
+        mpSkip = MediaPlayer.create(this, R.raw.buttonpress);
         tv_Question = findViewById(R.id.tvQuestion);
         tv_Timer = findViewById(R.id.tvTimer);
+        tv_SkipQuestion = findViewById(R.id.tvSkipQuestion);
         tv_Category = findViewById(R.id.tvCategory);
         btn_Option1 = findViewById(R.id.btnOption1);
         btn_Option2 = findViewById(R.id.btnOption2);
         btn_Option3 = findViewById(R.id.btnOption3);
         btn_Option4 = findViewById(R.id.btnOption4);
         btn_NextQuestion = findViewById(R.id.btnNextQuestion);
+
         //using "Back Home" and "User Info" buttons from top_menu_bar.xml
         btn_ScorePoints = findViewById(R.id.btnUserInfo);
         btn_BackToHome = findViewById(R.id.btnBackToHome);
@@ -396,7 +451,10 @@ public class QuestionPage extends AppCompatActivity {
         timeLeftText += ""+minutes;
         timeLeftText += ":";
 
-        if(seconds<10)timeLeftText +="0";
+        if(seconds<10){
+            mpMusic.start();
+            timeLeftText +="0";
+        }
         timeLeftText += seconds;
 
         tv_Timer.setText(timeLeftText);
@@ -414,7 +472,6 @@ public class QuestionPage extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
-
 
 
     @Override

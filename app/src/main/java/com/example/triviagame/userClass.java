@@ -168,9 +168,8 @@ public class userClass {
          * if someone does else statement will change it back to right number of coins */
         if(getCoins() > coins )
             setCoins(coins);
-        else{
-            setCoins(coins);
-            updateCoins();}
+        else
+            updateCoins();
 
         int score = Integer.parseInt(newMap.get(FIRESTORE_HEIGHEST_SCORE).toString());
         if(getHighestScore() > score)

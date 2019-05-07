@@ -14,7 +14,7 @@ import android.widget.Button;
 
 public class HeaderClass extends AppCompatActivity {
 
-    public final static String GAME_NAME = "Trivia RUSH!";
+    public final static String GAME_NAME = "";
     public static final String DATABASE_NAME = "GameDatabase.db";
     public static final String TABLE_NAME = "TRIVIA_QUESTIONS";
     public static final String CATEGORY_COL = "Category";

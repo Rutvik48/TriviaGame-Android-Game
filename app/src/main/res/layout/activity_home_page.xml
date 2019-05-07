@@ -22,14 +22,14 @@
     <Button
         android:id="@+id/btnGameStart"
         android:layout_width="374dp"
-        android:layout_height="176dp"
+        android:layout_height="106dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="136dp"
-        android:background="@android:drawable/screen_background_light_transparent"
+        android:background="@drawable/button1"
         android:fontFamily="cursive"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="#096164"
@@ -71,6 +71,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/button1"
         android:fontFamily="cursive"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display3"
@@ -79,24 +80,43 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGameStart"
-        app:layout_constraintVertical_bias="0.349" />
+        app:layout_constraintVertical_bias="0.142" />
 
     <TextView
         android:id="@+id/tvChangeBackground"
-        android:text="Change Background"
-        android:layout_width="wrap_content"
-        android:layout_height="43dp"
+        android:layout_width="355dp"
+        android:layout_height="38dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:background="@drawable/button1"
         android:fontFamily="cursive"
-        android:textColor="#096164"
-        android:textSize="20sp"
+        android:text="Change Background"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.967"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/HorGuideline" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLogIn" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="319dp"
+        android:layout_height="186dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnGameStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/HorGuideline"
+        app:layout_constraintVertical_bias="0.723"
+        app:srcCompat="@drawable/game_logo" />
 
 </android.support.constraint.ConstraintLayout>

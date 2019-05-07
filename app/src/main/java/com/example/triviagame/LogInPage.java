@@ -141,6 +141,9 @@ public class LogInPage extends AppCompatActivity {
                         //If sign has failed, displaymeesage to user
                         //if succeeds auth state listner will be notified and logic handle the user
                         progressBar.setVisibility(View.GONE);
+                        userClass user = new userClass(getApplicationContext());
+                        user.userJustLogedIn = true;
+                        user.updateUI();
                         //there was an error
                         if(!task.isSuccessful()){
                             Toast.makeText(LogInPage.this,"Authentication failed", Toast.LENGTH_LONG ).show();

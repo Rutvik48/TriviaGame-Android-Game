@@ -32,7 +32,7 @@ public class userClass {
     public final String FIRESTORE_USER_ID = "UserID";
     public final String FIRESTORE_COINS = "Coins";
     public final String FIRESTORE_HEIGHEST_SCORE = "Score";
-
+    public static boolean userJustLogedIn;
 
     public userClass (){
         mAuth = FirebaseAuth.getInstance();
@@ -141,7 +141,15 @@ public class userClass {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         newMap = document.getData();
-                        getDataFromMap();
+                        if(userJustLogedIn){
+                            userJustLogedIn = false;
+                            Log.d("userJustLoggedIn State:", "userJustLoggedIn State: True");
+                            userLoggedIn();
+
+                        }else{
+                            Log.d("userJustLoggedIn State:", "userJustLoggedIn State: False");
+                            getDataFromMap();
+                        }
                     } else {
                         Log.d(TAG, "No such document found");
                     }
@@ -151,6 +159,16 @@ public class userClass {
             }
         });
     }
+
+    private void userLoggedIn(){
+
+        setUserEmail(newMap.get(FIRESTORE_USER_EMAIL).toString());
+        setuID(newMap.get(FIRESTORE_USER_ID).toString());
+        setCoins(Integer.parseInt(newMap.get(FIRESTORE_COINS).toString()));
+        setHighestScore(Integer.parseInt(newMap.get(FIRESTORE_HEIGHEST_SCORE).toString()));
+
+    }
+
 
     private void getDataFromMap(){
 
@@ -166,9 +184,10 @@ public class userClass {
         * the if statement will update it when user connects to internet
         * this also ensure that, someone can't just increase numbers of coins on database,
          * if someone does else statement will change it back to right number of coins */
-        if(getCoins() > coins )
+        if(getCoins() > coins || userJustLogedIn) {
             setCoins(coins);
-        else
+            updateCoins();
+        }else
             updateCoins();
 
         int score = Integer.parseInt(newMap.get(FIRESTORE_HEIGHEST_SCORE).toString());

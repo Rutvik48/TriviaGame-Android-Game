@@ -9,9 +9,11 @@ import android.support.constraint.ConstraintLayout;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PopUpWindow extends Activity {
 
@@ -41,6 +43,8 @@ public class PopUpWindow extends Activity {
 
         //set text to buttons and TextViews
         setTexts();
+
+        userClass.userJustLogedIn = false;
 
     }
 
@@ -88,6 +92,11 @@ public class PopUpWindow extends Activity {
                     btn_SignOut.setText("Log In");
                     counter++;
                     userClass.emptyUserFields();
+
+                    Toast toast = Toast.makeText(getApplicationContext(),"Logging Out? Press it again!",Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+
                 }else {
 
                     if (btn_SignOut.getText() == "Log In" && counter == 1) {

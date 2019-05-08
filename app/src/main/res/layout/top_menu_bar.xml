@@ -44,9 +44,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintEnd_toEndOf="@id/endVerGuideline"
         app:layout_constraintStart_toStartOf="@+id/startVerGuideline"
         app:layout_constraintTop_toTopOf="@+id/topHorGuideline"
@@ -64,8 +62,8 @@
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="@color/colorAccent"
-            android:textSize="36sp"
             android:textStyle="bold"
+            android:autoSizeTextType="uniform"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="119dp" />
 
@@ -95,13 +93,5 @@
             tools:layout_editor_absoluteY="119dp" />
 
     </LinearLayout>
-
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toTopOf="@+id/bottomHorGuideline"
-        tools:layout_editor_absoluteX="8dp" />
 
 </android.support.constraint.ConstraintLayout>

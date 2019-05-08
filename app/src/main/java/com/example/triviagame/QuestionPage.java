@@ -442,7 +442,7 @@ public class QuestionPage extends AppCompatActivity {
     public void updateTimer(){
 
         int minutes = (int)timeLeftInMills/60000;
-        int seconds = (int) timeLeftInMills %60000/1000;
+        int seconds = (int) (timeLeftInMills %60000/1000) + 1;
 
         String timeLeftText;
 

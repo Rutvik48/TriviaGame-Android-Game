@@ -72,8 +72,6 @@ public class EndPage extends AppCompatActivity {
         Log.d(TAG, "GetCoins() = " + curUser.getCoins()+"   "+receivedCoins+"     "+ temp);
         curUser.setCoins(temp);
 
-        tv_CoinRecived.setText(Integer.toString(curUser.getCoins()));
-
         curUser.updateCoins();
 
     }

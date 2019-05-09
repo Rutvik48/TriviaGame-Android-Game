@@ -37,6 +37,8 @@ public class CategoriesPage extends AppCompatActivity {
     private MediaPlayer mpRandom,mpCat,mpSwoosh,mpMusic;
     //private QuestionPage questionPage = new QuestionPage();
 
+    HeaderClass headerClassInstance = new HeaderClass();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +57,6 @@ public class CategoriesPage extends AppCompatActivity {
         //show question randomly
         startRandomQuestion();
 
-        HeaderClass headerClassInstance = new HeaderClass();
         headerClassInstance.setBackground(layout, getApplicationContext());
 
 
@@ -75,8 +76,7 @@ public class CategoriesPage extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        HomePage homePage = new HomePage();
-        if((homePage.musicSetting) && (!mpMusic.isPlaying()))
+        if((headerClassInstance.getMusicPref(getApplicationContext())) && (!mpMusic.isPlaying()))
             mpMusic.start();
 
     }
@@ -85,8 +85,7 @@ public class CategoriesPage extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        HomePage homePage = new HomePage();
-        if((homePage.musicSetting) && (!mpMusic.isPlaying()))
+        if((headerClassInstance.getMusicPref(getApplicationContext())) && (!mpMusic.isPlaying()))
             mpMusic.start();
     }
 

@@ -39,7 +39,8 @@ public class SplashScreen extends AppCompatActivity {
         HeaderClass headerClassInstance = new HeaderClass();
         headerClassInstance.setBackground(layout, getApplicationContext());
 
-        startService(new Intent(this, BackgroundSoundService.class));
+        if(headerClassInstance.getMusicPref(getApplicationContext()))
+            startService(new Intent(this, BackgroundSoundService.class));
 
     }
 

@@ -109,7 +109,7 @@ public class SignUpPage extends AppCompatActivity {
         dataTemp.put(userClass.FIRESTORE_USER_EMAIL,email);
         String uid = user.getUid();
         dataTemp.put(userClass.FIRESTORE_USER_ID, uid);
-        dataTemp.put(userClass.FIRESTORE_COINS, 0);
+        dataTemp.put(userClass.FIRESTORE_COINS, 10);
         dataTemp.put(userClass.FIRESTORE_HEIGHEST_SCORE, 0);
         temp.document(email).set(dataTemp);
 

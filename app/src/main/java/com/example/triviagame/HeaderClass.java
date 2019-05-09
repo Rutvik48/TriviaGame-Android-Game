@@ -38,9 +38,9 @@ public class HeaderClass extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.top_menu_bar);
 
-
         //layout_header = (ConstraintLayout)findViewById(R.id.layoutHeader);
     }
+
 
     public int chnageBackground(int backgroundNum, ConstraintLayout layout){
 
@@ -91,8 +91,33 @@ public class HeaderClass extends AppCompatActivity {
         }
     }
 
+    public void changeMusicPref(Context context){
+
+        boolean currentMusicPref = getMusicPref(context);
+
+        backgroundPref = PreferenceManager.getDefaultSharedPreferences(context);
+        prefEditor = backgroundPref.edit();
+
+        if(currentMusicPref)
+            prefEditor.putBoolean("Music", false);
+        else
+            prefEditor.putBoolean("Music", true);
+
+        prefEditor.apply();
+
+
+
+    }
+
     public int getCurBackground(Context context){
         backgroundPref = PreferenceManager.getDefaultSharedPreferences(context);
         return (backgroundPref.getInt("Background", 0));
+    }
+
+    public boolean getMusicPref(Context context){
+
+        backgroundPref = PreferenceManager.getDefaultSharedPreferences(context);
+        return (backgroundPref.getBoolean("Music", false));
+
     }
 }

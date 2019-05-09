@@ -42,6 +42,7 @@ public class QuestionPage extends AppCompatActivity {
     private CategoriesPage categoriesPage = new CategoriesPage();
     private userClass user;
     private MediaPlayer mpWrong,mpCorrect,mpMusic;
+    HeaderClass headerClassInstance = new HeaderClass();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,6 @@ public class QuestionPage extends AppCompatActivity {
         btn_BackToHome.setText("Back To\n Home");
         btn_ScorePoints.setText(Integer.toString(currentPoints));
 
-        HeaderClass headerClassInstance = new HeaderClass();
         headerClassInstance.setBackground(layout, getApplicationContext());
 
         user = new userClass(getApplicationContext());
@@ -121,9 +121,10 @@ public class QuestionPage extends AppCompatActivity {
 
                 categoriesPage = null;
                 if(homeCondition){
+                    stopTimer();
                     startActivity(new Intent(getApplicationContext(),HomePage.class));
                     finish();
-                    stopTimer();
+
                 }else{
                     Toast.makeText(getApplicationContext(),"Press again to go to Home.", Toast.LENGTH_LONG).show();
                     homeCondition = true;
@@ -173,7 +174,6 @@ public class QuestionPage extends AppCompatActivity {
         TOTAL_QUESTIONS = databaseAccess.totalQuestions();
         databaseAccess.close();
     }
-
 
 
     public void getQuestion(){
@@ -488,9 +488,8 @@ public class QuestionPage extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (!mpMusic.isPlaying()) {
-            HomePage homePage = new HomePage();
 
-            if(homePage.musicSetting)
+            if(headerClassInstance.getMusicPref(getApplicationContext()))
                 mpMusic.start();
         }
 

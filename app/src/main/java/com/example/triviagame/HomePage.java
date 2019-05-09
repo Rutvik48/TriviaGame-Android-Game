@@ -1,6 +1,7 @@
 package com.example.triviagame;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.constraint.ConstraintLayout;
@@ -50,10 +51,15 @@ public class HomePage extends AppCompatActivity {
 
         clickListner();
         changeBackground();
-        //mpBackground.start();
 
         switchMusic();
-        sw_Music.setChecked(true);
+        sw_Music.setChecked(headerClassInstance.getMusicPref(getApplicationContext()));
+        musicSetting = headerClassInstance.getMusicPref(getApplicationContext());
+
+        if(musicSetting)
+            Toast.makeText(getApplicationContext(), "Music Settings is True", Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(getApplicationContext(), "Music Settings is False", Toast.LENGTH_LONG).show();
     }
 
     private void switchMusic(){
@@ -62,18 +68,17 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                sw_Music.setChecked(musicSetting);
+                headerClassInstance.changeMusicPref(getApplicationContext());
+                musicSetting = headerClassInstance.getMusicPref(getApplicationContext());
 
                 if(musicSetting){
                     startService(new Intent(getApplicationContext(),BackgroundSoundService.class));
-                    musicSetting = false;
                 }
                 else{
                     stopService(new Intent(getApplicationContext(), BackgroundSoundService.class));
-                    musicSetting = true;
                 }
 
-
+                sw_Music.setChecked(musicSetting);
                 //Toast.makeText(getApplicationContext(),"Music Changed", Toast.LENGTH_LONG).show();
             }
         });
@@ -83,13 +88,18 @@ public class HomePage extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+
+        Log.d("On Stop", "OnStop");
         stopService(new Intent(this, BackgroundSoundService .class));
 
+        Toast.makeText(getApplicationContext(), "Music Settings is False", Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        Log.d("On Start", "OnStart");
 
         if(musicSetting)
             startService(new Intent(this,BackgroundSoundService.class));
@@ -98,7 +108,6 @@ public class HomePage extends AppCompatActivity {
     public void checkUser(){
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
-
 
         //this checks if any user is logged in or not
         if (auth.getCurrentUser() != null){
@@ -110,7 +119,6 @@ public class HomePage extends AppCompatActivity {
             userClass.updateUI();
         }
     }
-
 
     //set settings based on user preferences
     private void initializeSettings(){
@@ -124,7 +132,6 @@ public class HomePage extends AppCompatActivity {
         tv_GameName.setText(HeaderClass.GAME_NAME);
         btn_GameStart.setText("Start Game");
         tv_LogIn.setText("Log in / Sign Up");
-
     }
 
     //this method is called when a user clicks any button on Home Screen
@@ -138,7 +145,7 @@ public class HomePage extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), PopUpWindow.class));
                     mpHigh.start();
                 }else{
-                    Toast.makeText(getApplicationContext(), "Log in or Sign up to see user info.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Sign up to get free 10 coins.",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -212,8 +219,8 @@ public class HomePage extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (exitCondition){
-            finish();
             super.onBackPressed();
+            finish();
             stopService(new Intent(this, MyService.class));
         }else{
             Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();

@@ -62,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
+        app:layout_constraintGuide_percent="0.98" />
 
 
     <View
@@ -102,8 +102,11 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif-condensed"
+        android:gravity="center_vertical"
         android:text="Question:"
+        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#000000"
         android:textSize="26sp"
@@ -200,8 +203,9 @@
         android:fontFamily="sans-serif-condensed"
         android:text="Category:"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#556961"
+        android:textColor="@color/colorAccent"
         android:textSize="26sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/topHorGuideline11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -251,25 +255,22 @@
 
         <TextView
             android:id="@+id/tvSkipQuestion"
-            android:layout_width="159dp"
+            android:layout_width="135dp"
             android:layout_height="0dp"
             android:layout_gravity="start"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
             android:layout_weight="50"
-            android:background="@drawable/button2"
+            android:autoSizeTextType="uniform"
+            android:background="@drawable/coin"
             android:fontFamily="cursive"
-            android:text="Skip for -1 Coin"
-            android:textAlignment="viewStart"
+            android:gravity="center_vertical"
+            android:padding="10px"
+            android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="#FF096164"
+            android:textColor="@color/colorAccent"
             android:textStyle="bold"
             android:typeface="serif"
-            android:padding="10px"
-            android:autoSizeTextType="uniform"
-            android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.062"
@@ -301,7 +302,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.888"
-            app:layout_constraintStart_toEndOf="@+id/tvTimer"
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 

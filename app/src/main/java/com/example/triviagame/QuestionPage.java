@@ -1,13 +1,9 @@
 package com.example.triviagame;
 
-import android.app.ActionBar;
-import android.app.ActivityManager;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.constraint.ConstraintLayout;
@@ -15,11 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Random;
@@ -28,8 +22,8 @@ public class QuestionPage extends AppCompatActivity {
 
     private TextView tv_Question, tv_Timer, tv_Category, tv_SkipQuestion;
     private Button btn_Option1,btn_Option2,btn_Option3,btn_Option4, btn_ScorePoints, btn_BackToHome, btn_NextQuestion;
-    private String option1, option2, option3, option4, rightAnswer;
-    private int currentPoints = 0;
+    private String rightAnswer;
+    private int currentPoints = 30;
     private int currentCoins;
     private static int TOTAL_QUESTIONS;
     private static boolean RANDOM_QUESTION;
@@ -48,7 +42,7 @@ public class QuestionPage extends AppCompatActivity {
     private CategoriesPage categoriesPage = new CategoriesPage();
 
     private userClass user;
-    private MediaPlayer mpWrong,mpCorrect,mpSkip,mpSwoosh,mpMusic;
+    private MediaPlayer mpWrong,mpCorrect,mpMusic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +57,7 @@ public class QuestionPage extends AppCompatActivity {
         startClock();
 
         btn_BackToHome.setText("Back To\n Home");
-        btn_ScorePoints.setText(" 00 ");
+        btn_ScorePoints.setText(Integer.toString(currentPoints));
 
         HeaderClass headerClassInstance = new HeaderClass();
         headerClassInstance.setBackground(layout, getApplicationContext());
@@ -88,9 +82,10 @@ public class QuestionPage extends AppCompatActivity {
         currentCoins = user.getCoins();
 
         if (currentCoins <= 0){
-            tv_SkipQuestion.setText("Earn coins to skip");
+            tv_SkipQuestion.setText("0");
             tv_SkipQuestion.setTypeface(Typeface.SANS_SERIF, Typeface.ITALIC);
-        }
+        }else
+            tv_SkipQuestion.setText(Integer.toString(currentCoins));
 
         //this stores the number of coins user has
         int currentCoin = user.getCoins();
@@ -108,11 +103,12 @@ public class QuestionPage extends AppCompatActivity {
                     user.setCoins(currentCoin);
                     user.updateCoins();
                     showNextQuestion();
+                    tv_SkipQuestion.setText(Integer.toString(currentCoin));
+                }else{
+                    tv_SkipQuestion.setText("No Coins");
+                    Toast.makeText(getApplicationContext(),"Earn more coins to skip a question", Toast.LENGTH_LONG).show();
                 }
 
-                if(currentCoin <= 0 ){
-                    tv_SkipQuestion.setText("Earn coins to skip");
-                }
             }
         });
 
@@ -146,9 +142,14 @@ public class QuestionPage extends AppCompatActivity {
 
 
     private void deductPoint(){
+
         //deduct points by 5
         currentPoints -= 5;
-        updateScoreText(currentPoints);
+
+        if(currentPoints < 5)
+            endGame();
+        else
+            updateScoreText(currentPoints);
     }
 
     private void updateScoreText(int score){
@@ -225,16 +226,6 @@ public class QuestionPage extends AppCompatActivity {
             optionsArray[i] = anArray[rand%4];
             rand++;
         }
-        /*while(loopCondition){
-            int rand = random.nextInt(4);
-            Log.d("TempArrayAfter Func",Integer.toString(rand));
-            if(optionsArray[rand] == null){
-                optionsArray[counter] = anArray[rand];
-                if(counter >= 3)
-                    loopCondition = false;
-                counter++;
-            }
-        }*/
 
         return optionsArray;
     }
@@ -379,11 +370,9 @@ public class QuestionPage extends AppCompatActivity {
     }
 
     public void assignValues(){
-        mpMusic = MediaPlayer.create(this,R.raw.bensoundepic);
+        mpMusic = MediaPlayer.create(this,R.raw.goinghigher);
         mpCorrect = MediaPlayer.create(this,R.raw.correct);
         mpWrong = MediaPlayer.create(this,R.raw.wronganswer);
-        mpSwoosh = MediaPlayer.create(this,R.raw.swoosh);
-        mpSkip = MediaPlayer.create(this, R.raw.buttonpress);
         tv_Question = findViewById(R.id.tvQuestion);
         tv_Timer = findViewById(R.id.tvTimer);
         tv_SkipQuestion = findViewById(R.id.tvSkipQuestion);
@@ -416,7 +405,7 @@ public class QuestionPage extends AppCompatActivity {
     }
 
     public void startTimer(){
-        countDownTimer = new CountDownTimer(timeLeftInMills, 1000) {
+        countDownTimer = new CountDownTimer(timeLeftInMills, 100) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -429,16 +418,20 @@ public class QuestionPage extends AppCompatActivity {
             public void onFinish() {
                 timesUp=true;
                 if(appForegroundStatus == true){
-                    EndPage endPage = new EndPage();
-                    endPage.setTotalPoints(currentPoints);
-                    startActivity(new Intent(getApplicationContext(),EndPage.class));
-                    finish();
+                    endGame();
                 }
 
             }
         }.start();
     }
 
+    private void endGame(){
+
+        EndPage endPage = new EndPage();
+        endPage.setTotalPoints(currentPoints);
+        startActivity(new Intent(getApplicationContext(),EndPage.class));
+        finish();
+    }
     public void updateTimer(){
 
         int minutes = (int)timeLeftInMills/60000;
@@ -452,7 +445,6 @@ public class QuestionPage extends AppCompatActivity {
         timeLeftText += ":";
 
         if(seconds<10){
-            mpMusic.start();
             timeLeftText +="0";
         }
         timeLeftText += seconds;
@@ -470,7 +462,7 @@ public class QuestionPage extends AppCompatActivity {
         //this code makes the status bar transparent
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
 
@@ -494,9 +486,28 @@ public class QuestionPage extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (!mpMusic.isPlaying()) {
+            mpMusic.start();
+        }
+
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         Log.d("QuestionPage Status: ","BackGround");
         appForegroundStatus = false;
+        mpMusic.pause();
     }
+
+    //stop the Media to free up resources
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopService(new Intent(this,BackgroundSoundService.class));
+
+    }
+
 }

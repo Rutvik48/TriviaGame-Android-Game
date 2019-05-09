@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TriviaGame</string>
+    <string name="app_name">Trivia RUSH!</string>
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

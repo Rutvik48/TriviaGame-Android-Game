@@ -24,11 +24,8 @@ public class HomePage extends AppCompatActivity {
     private ConstraintLayout layout;
     //to exit the app this condition will be used
     private Boolean exitCondition = false;
-
     private FirebaseAuth auth;
-
-    private MediaPlayer mpPlayGame,mpHigh,mpBackground;
-
+    private MediaPlayer mpPlayGame, mpHigh, mpBackground;
 
     HeaderClass headerClassInstance = new HeaderClass();
 
@@ -49,7 +46,7 @@ public class HomePage extends AppCompatActivity {
 
         clickListner();
         changeBackground();
-        mpBackground.start();
+        //mpBackground.start();
 
     }
 
@@ -57,16 +54,17 @@ public class HomePage extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        mpBackground.stop();
-        mpBackground.release();
 
-        mpHigh.stop();
-        mpHigh.release();
+        stopService(new Intent(this, BackgroundSoundService .class));
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
 
-        mpPlayGame.stop();
-        mpPlayGame.release();
-
+        startService(new Intent(this,BackgroundSoundService.class));
     }
 
     public void checkUser(){
@@ -82,9 +80,6 @@ public class HomePage extends AppCompatActivity {
             //this loads information from FireStore Database and adds it to userClass variables
             userClass userClass = new userClass(getApplicationContext());
             userClass.updateUI();
-        }else{
-            //when there is no user logged in, hide the UserInfo text
-            btn_UserInfo.setVisibility(View.GONE);
         }
     }
 
@@ -110,9 +105,13 @@ public class HomePage extends AppCompatActivity {
         btn_UserInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), PopUpWindow.class));
-                mpHigh.start();
 
+                if(auth.getCurrentUser() != null){
+                    startActivity(new Intent(getApplicationContext(), PopUpWindow.class));
+                    mpHigh.start();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Log in or Sign up to see user info.",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -159,7 +158,7 @@ public class HomePage extends AppCompatActivity {
         //this code makes the status bar transparent
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                WindowManager.LayoutParams.FLAG_DIM_BEHIND
         );
 
     }
@@ -186,6 +185,7 @@ public class HomePage extends AppCompatActivity {
         if (exitCondition){
             finish();
             super.onBackPressed();
+            stopService(new Intent(this, MyService.class));
         }else{
             Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT).show();
             exitCondition = true;

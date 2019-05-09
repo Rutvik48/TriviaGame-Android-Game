@@ -5,12 +5,13 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.widget.Toast;
 
 public class BackgroundSoundService extends Service {
     //@androidx.annotation.Nullable
     private int length = 0;
     private static final String TAG = null;
-    MediaPlayer player;
+    MediaPlayer player,player2,player3;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -22,19 +23,29 @@ public class BackgroundSoundService extends Service {
     public void onCreate() {
         super.onCreate();
         player = MediaPlayer.create(this, R.raw.jazzyfrenchy);
+
+
         player.setLooping(true); // Set looping
+
+
         player.setVolume(70,70);
 
     }
     @SuppressLint("WrongConstant")
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+
+
         player.start();
+
+
         return START_STICKY;
     }
 
     public void onStart(Intent intent, int startId) {
         // TO DO
         player.start();
+        Toast.makeText(this, "Service Started and Playing Music", Toast.LENGTH_LONG).show();
     }
     public IBinder onUnBind(Intent arg0) {
         // TO DO Auto-generated method
@@ -42,9 +53,10 @@ public class BackgroundSoundService extends Service {
     }
 
     public void onStop() {
-        player.stop();
-        player.release();
-        player = null;
+        player.pause();
+
+        // player.release();
+        // player = null;
 
     }
     public void onPause() {
@@ -55,11 +67,14 @@ public class BackgroundSoundService extends Service {
 
         }
 
+
     }
     @Override
     public void onDestroy() {
         player.stop();
         player.release();
+
+
     }
 
     @Override

@@ -7,31 +7,30 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/game_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/game_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service android:enabled="true" android:name=".BackgroundSoundService" />
-        <activity android:name=".EndPage"></activity>
-        <activity android:name=".ResetPasswordActivity" />
-        <activity android:name=".QuestionPage" />
+        <activity android:name=".EndPage" android:screenOrientation="portrait" />
+        <activity android:name=".ResetPasswordActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".QuestionPage" android:screenOrientation="portrait"/>
         <activity
             android:name=".PopUpWindow"
-            android:theme="@style/AppTheme.TransparentTheme" />
-        <activity android:name=".SplashScreen">
+            android:theme="@style/AppTheme.TransparentTheme"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SplashScreen" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HeaderClass" />
-        <activity android:name=".SignUpPage" />
-        <activity android:name=".LogInPage" />
-        <activity android:name=".CategoriesPage" />
-        <activity android:name=".HomePage" />
+        <activity android:name=".HeaderClass" android:screenOrientation="portrait"/>
+        <activity android:name=".SignUpPage" android:screenOrientation="portrait"/>
+        <activity android:name=".LogInPage" android:screenOrientation="portrait"/>
+        <activity android:name=".CategoriesPage" android:screenOrientation="portrait"/>
+        <activity android:name=".HomePage" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

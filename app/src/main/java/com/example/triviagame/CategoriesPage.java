@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import static android.graphics.Color.rgb;
 
 public class CategoriesPage extends AppCompatActivity {
@@ -31,8 +33,8 @@ public class CategoriesPage extends AppCompatActivity {
     public static int []selectedCategories;
     private ConstraintLayout layout;
     private LinearLayout linearLayout;
-
-    private MediaPlayer mpRandom,mpCat,mpSwoosh;
+    private FirebaseAuth auth;
+    private MediaPlayer mpRandom,mpCat,mpSwoosh,mpMusic;
     //private QuestionPage questionPage = new QuestionPage();
 
     @Override
@@ -56,6 +58,7 @@ public class CategoriesPage extends AppCompatActivity {
         HeaderClass headerClassInstance = new HeaderClass();
         headerClassInstance.setBackground(layout, getApplicationContext());
 
+        mpMusic.start();
         //CreateButton();
     }
 
@@ -65,15 +68,24 @@ public class CategoriesPage extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        mpSwoosh.stop();
-        mpSwoosh.stop();
+        mpMusic.pause();
 
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-        mpCat.stop();
-        mpCat.release();
+        mpMusic.start();
 
-        mpRandom.stop();
-        mpRandom.release();
+        if (!mpMusic.isPlaying()) {
+            mpMusic.start();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mpMusic.start();
     }
 
     private void setCategoryNames(){
@@ -124,10 +136,15 @@ public class CategoriesPage extends AppCompatActivity {
         btn_UserInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //user info will be shown
-                Intent intent = new Intent(CategoriesPage.this, PopUpWindow.class);
-                startActivity(intent);
-                mpSwoosh.start();
+
+                auth = FirebaseAuth.getInstance();
+
+                if(auth.getCurrentUser() != null){
+                    startActivity(new Intent(getApplicationContext(), PopUpWindow.class));
+                    mpSwoosh.start();
+                }else{
+                    Toast.makeText(getApplicationContext(), "Log in or Sign up to see user info.",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -289,7 +306,7 @@ public class CategoriesPage extends AppCompatActivity {
         //this code makes the status bar transparent
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
     }
 
@@ -322,6 +339,9 @@ public class CategoriesPage extends AppCompatActivity {
 
     //this method will be called to assign buttons and text to variable
     private void assignValues(){
+        mpMusic = MediaPlayer.create(this,R.raw.relaxing);
+        mpMusic.setLooping(true);
+        mpMusic.setVolume(80,80);
         mpSwoosh = MediaPlayer.create(this,R.raw.swoosh);
         mpRandom = MediaPlayer.create(this,R.raw.buttonpress);
         mpCat = MediaPlayer.create(this,R.raw.buttontoggle);
@@ -347,6 +367,7 @@ public class CategoriesPage extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //back button will not do anything
+        stopService(new Intent(this,BackgroundSoundService.class));
     }
 
 }

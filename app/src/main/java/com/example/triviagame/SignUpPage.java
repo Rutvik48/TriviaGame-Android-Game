@@ -172,7 +172,7 @@ public class SignUpPage extends AppCompatActivity {
         //this code makes the status bar transparent
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
     }
 

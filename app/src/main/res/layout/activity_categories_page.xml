@@ -10,8 +10,22 @@
 
     <include
         layout="@layout/top_menu_bar"
-        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteX="239dp"
         tools:layout_editor_absoluteY="0dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/startVerGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/endVerGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
 
     <TextView
         android:id="@+id/tvInfoText"
@@ -27,53 +41,55 @@
         android:text="Select one of two options below:"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/btnRandomQuestion"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/endVerGuideline"
+        app:layout_constraintStart_toStartOf="@+id/startVerGuideline"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.724" />
 
     <Button
         android:id="@+id/btnRandomQuestion"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:autoSizeTextType="uniform"
         android:background="@drawable/button1"
         android:fontFamily="cursive"
         android:text="Random Questions"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#096164"
+        android:textColor="@color/colorAccent"
         android:textSize="26sp"
+        android:textStyle="bold"
         android:typeface="serif"
         app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.723" />
 
     <TextView
         android:id="@+id/tvCategoryList"
-        android:layout_width="395dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@drawable/nonclickable_button"
         android:fontFamily="cursive"
+        android:gravity="center_vertical"
         android:text="Category List"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#096164"
+        android:textColor="@color/colorAccent"
         android:textColorLink="@color/colorAccent"
         android:textSize="40sp"
         android:textStyle="bold"
-        android:background="@drawable/button1"
         app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,9 +128,8 @@
         android:fillViewport="true"
         android:scrollbarStyle="insideOverlay"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/endVerGuideline"
+        app:layout_constraintStart_toStartOf="@+id/startVerGuideline"
         app:layout_constraintTop_toBottomOf="@+id/divider2"
         app:layout_constraintVertical_bias="0.0">
 
@@ -122,9 +137,9 @@
             android:id="@+id/catLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="-20dp"
-            android:layout_margin="10dp"
             android:orientation="vertical">
 
             <TextView
@@ -244,13 +259,15 @@
 
     <Button
         android:id="@+id/btnContinue"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="36dp"
+        android:background="@drawable/button1"
         android:fontFamily="cursive"
         android:text="Continue"
         android:textAlignment="center"
@@ -259,10 +276,11 @@
         android:textSize="26sp"
         android:typeface="serif"
         android:visibility="invisible"
-        android:background="@drawable/button1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+        app:layout_constraintEnd_toStartOf="@+id/endVerGuideline"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/startVerGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        app:layout_constraintVertical_bias="0.785" />
 
 </android.support.constraint.ConstraintLayout>

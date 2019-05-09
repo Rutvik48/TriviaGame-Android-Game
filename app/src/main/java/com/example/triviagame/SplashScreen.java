@@ -39,6 +39,8 @@ public class SplashScreen extends AppCompatActivity {
         HeaderClass headerClassInstance = new HeaderClass();
         headerClassInstance.setBackground(layout, getApplicationContext());
 
+        startService(new Intent(this, BackgroundSoundService.class));
+
     }
 
     private class LogoLauncher extends Thread{

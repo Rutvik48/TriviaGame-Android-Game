@@ -87,19 +87,18 @@ public class PopUpWindow extends Activity {
             @Override
             public void onClick(View v) {
                 mpButton.start();
-                if (userClass.mAuth.getUid() != null){
-                    userClass.mAuth.signOut();
-                    btn_SignOut.setText("Log In");
-                    counter++;
-                    userClass.emptyUserFields();
-
-                    Toast toast = Toast.makeText(getApplicationContext(),"Logging Out? Press it again!",Toast.LENGTH_LONG);
+                if (counter == 0){
+                    Toast toast = Toast.makeText(getApplicationContext(),"Logging Out? Press it again!",Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.CENTER,0,0);
                     toast.show();
+                    counter++;
 
                 }else {
+                    userClass.mAuth.signOut();
+                    btn_SignOut.setText("Log In");
+                    userClass.emptyUserFields();
 
-                    if (btn_SignOut.getText() == "Log In" && counter == 1) {
+                    if ( counter == 1) {
                         startActivity(new Intent(getApplicationContext(), LogInPage.class));
                         finish();
                     }

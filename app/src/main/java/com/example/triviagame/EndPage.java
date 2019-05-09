@@ -151,14 +151,6 @@ public class EndPage extends AppCompatActivity {
         });
     }
 
-    //stop the Media to free up resources
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mpMusic.stop();
-        mpMusic.release();
-
-    }
 
     private void assignVariables(){
 
@@ -183,12 +175,30 @@ public class EndPage extends AppCompatActivity {
         //this code makes the status bar transparent
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
 
     }
 
     @Override
     public void onBackPressed() {
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+    }
+
+    //stop the Media to free up resources
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // mpBackground.stop();
+
+
+        stopService(new Intent(this,BackgroundSoundService.class));
+
     }
 }

@@ -8,10 +8,9 @@
     tools:context=".HomePage">
 
     <include
-        android:id="@+id/include2"
         layout="@layout/top_menu_bar"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="114dp" />
+        tools:layout_editor_absoluteY="0dp" />
 
     <android.support.constraint.Guideline
         android:id="@+id/HorGuideline"
@@ -71,18 +70,17 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/button1"
         android:fontFamily="cursive"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display3"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/swMusic"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGameStart"
-        app:layout_constraintVertical_bias="0.19" />
+        app:layout_constraintVertical_bias="0.142" />
 
     <TextView
         android:id="@+id/tvChangeBackground"
@@ -93,7 +91,6 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
-        android:layout_marginBottom="8dp"
         android:background="@drawable/button1"
         android:fontFamily="cursive"
         android:text="Change Background"
@@ -101,12 +98,9 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display3"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/swMusic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLogIn"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLogIn" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -128,15 +122,27 @@
     <Switch
         android:id="@+id/swMusic"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="38dp"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
-        android:layout_marginBottom="8dp"
-        android:text="Switch"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/button2"
+        android:fontFamily="cursive"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="Music "
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+        android:textOff="Music Off"
+        android:textOn="Music On"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
+
 
 </android.support.constraint.ConstraintLayout>

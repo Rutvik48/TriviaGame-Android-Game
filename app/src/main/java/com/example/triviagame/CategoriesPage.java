@@ -58,7 +58,7 @@ public class CategoriesPage extends AppCompatActivity {
         HeaderClass headerClassInstance = new HeaderClass();
         headerClassInstance.setBackground(layout, getApplicationContext());
 
-        mpMusic.start();
+
         //CreateButton();
     }
 
@@ -75,17 +75,19 @@ public class CategoriesPage extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        mpMusic.start();
-
-        if (!mpMusic.isPlaying()) {
+        HomePage homePage = new HomePage();
+        if((homePage.musicSetting) && (!mpMusic.isPlaying()))
             mpMusic.start();
-        }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mpMusic.start();
+
+        HomePage homePage = new HomePage();
+        if((homePage.musicSetting) && (!mpMusic.isPlaying()))
+            mpMusic.start();
     }
 
     private void setCategoryNames(){

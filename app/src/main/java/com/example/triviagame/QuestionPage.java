@@ -40,7 +40,6 @@ public class QuestionPage extends AppCompatActivity {
     private int []selectedCategories;
     private int numberOfCategories = 8;
     private CategoriesPage categoriesPage = new CategoriesPage();
-
     private userClass user;
     private MediaPlayer mpWrong,mpCorrect,mpMusic;
 
@@ -489,7 +488,10 @@ public class QuestionPage extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (!mpMusic.isPlaying()) {
-            mpMusic.start();
+            HomePage homePage = new HomePage();
+
+            if(homePage.musicSetting)
+                mpMusic.start();
         }
 
     }

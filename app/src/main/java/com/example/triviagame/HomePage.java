@@ -6,9 +6,11 @@ import android.media.MediaPlayer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,9 +23,11 @@ public class HomePage extends AppCompatActivity {
     //NOTE: btn is for Button, tv for TextView
     private Button btn_GameStart, btn_BackHome, btn_UserInfo;
     public TextView tv_LogIn, tv_ChangeBackground, tv_GameName;
+    private Switch sw_Music;
     private ConstraintLayout layout;
     //to exit the app this condition will be used
     private Boolean exitCondition = false;
+    public  static boolean musicSetting;
     private FirebaseAuth auth;
     private MediaPlayer mpPlayGame, mpHigh, mpBackground;
 
@@ -48,13 +52,37 @@ public class HomePage extends AppCompatActivity {
         changeBackground();
         //mpBackground.start();
 
+        switchMusic();
+        sw_Music.setChecked(true);
+    }
+
+    private void switchMusic(){
+
+        sw_Music.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                sw_Music.setChecked(musicSetting);
+
+                if(musicSetting){
+                    startService(new Intent(getApplicationContext(),BackgroundSoundService.class));
+                    musicSetting = false;
+                }
+                else{
+                    stopService(new Intent(getApplicationContext(), BackgroundSoundService.class));
+                    musicSetting = true;
+                }
+
+
+                //Toast.makeText(getApplicationContext(),"Music Changed", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     //stop the Media to free up resources
     @Override
     protected void onStop() {
         super.onStop();
-
         stopService(new Intent(this, BackgroundSoundService .class));
 
     }
@@ -63,8 +91,8 @@ public class HomePage extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-
-        startService(new Intent(this,BackgroundSoundService.class));
+        if(musicSetting)
+            startService(new Intent(this,BackgroundSoundService.class));
     }
 
     public void checkUser(){
@@ -177,6 +205,7 @@ public class HomePage extends AppCompatActivity {
         tv_ChangeBackground = findViewById(R.id.tvChangeBackground);
         layout = findViewById(R.id.layoutHeader);
         tv_GameName = findViewById(R.id.tvGameName);
+        sw_Music = findViewById(R.id.swMusic);
     }
 
     //asks user to click twice on back button to exit the app

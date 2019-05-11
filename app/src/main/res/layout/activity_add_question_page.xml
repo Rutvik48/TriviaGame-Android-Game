@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddQuestionPage">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/TopHorGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/BotmHorGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <EditText
+        android:id="@+id/etCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="Category"
+        android:inputType="text"
+        android:padding="20dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/etQuestion" />
+
+    <EditText
+        android:id="@+id/etQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="Question"
+        android:inputType="text"
+        android:paddingTop="50dp"
+        android:paddingBottom="50dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/etCorrectAnswer"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <EditText
+        android:id="@+id/etCorrectAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/correct_ans"
+        android:ems="10"
+        android:hint="Correct Answer"
+        android:inputType="text"
+        android:padding="20dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/etWrongAns1" />
+
+    <EditText
+        android:id="@+id/etWrongAns1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/wrong_ans"
+        android:ems="10"
+        android:hint="1st Wrong Answer"
+
+        android:inputType="text"
+        android:padding="20dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/etWrongAns2" />
+
+    <EditText
+        android:id="@+id/etWrongAns2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/wrong_ans"
+        android:ems="10"
+        android:hint="2nd Wrong Answer"
+        android:inputType="text"
+        android:padding="20dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/etWrongAns3" />
+
+    <EditText
+        android:id="@+id/etWrongAns3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/wrong_ans"
+        android:ems="10"
+        android:hint="3rd Wrong Answer"
+        android:inputType="text"
+        android:padding="20dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/btnSubmit" />
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button1"
+        android:fontFamily="cursive"
+        android:text="Submit"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnHome" />
+    <Button
+        android:id="@+id/btnHome"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button1"
+        android:fontFamily="cursive"
+        android:text="Home"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/BotmHorGuideline" />
+
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/nonclickable_button"
+        android:text="Add Question "
+        android:fontFamily="cursive"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/etCategory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/TopHorGuideline" />
+
+</android.support.constraint.ConstraintLayout>

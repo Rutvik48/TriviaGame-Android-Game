@@ -56,10 +56,6 @@ public class HomePage extends AppCompatActivity {
         sw_Music.setChecked(headerClassInstance.getMusicPref(getApplicationContext()));
         musicSetting = headerClassInstance.getMusicPref(getApplicationContext());
 
-        if(musicSetting)
-            Toast.makeText(getApplicationContext(), "Music Settings is True", Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(getApplicationContext(), "Music Settings is False", Toast.LENGTH_LONG).show();
     }
 
     private void switchMusic(){
@@ -92,7 +88,6 @@ public class HomePage extends AppCompatActivity {
         Log.d("On Stop", "OnStop");
         stopService(new Intent(this, BackgroundSoundService .class));
 
-        Toast.makeText(getApplicationContext(), "Music Settings is False", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -112,7 +107,7 @@ public class HomePage extends AppCompatActivity {
         //this checks if any user is logged in or not
         if (auth.getCurrentUser() != null){
             //if user is looged in hide the "log in/ Sign up" text
-            tv_LogIn.setVisibility(View.INVISIBLE);
+            tv_LogIn.setText("Add Question");
 
             //this loads information from FireStore Database and adds it to userClass variables
             userClass userClass = new userClass(getApplicationContext());
@@ -163,9 +158,15 @@ public class HomePage extends AppCompatActivity {
         tv_LogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), LogInPage.class));
                 mpHigh.start();
+
+                if (auth.getCurrentUser() != null){
+                    startActivity(new Intent(getApplicationContext(), AddQuestionPage.class));
+                }else
+                    startActivity(new Intent(getApplicationContext(), LogInPage.class));
+
                 finish();
+
             }
         });
     }

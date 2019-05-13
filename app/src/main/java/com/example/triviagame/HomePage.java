@@ -92,10 +92,10 @@ public class HomePage extends AppCompatActivity {
                 musicSetting = headerClassInstance.getMusicPref(getApplicationContext());
 
                 if(musicSetting){
-                    startService(new Intent(getApplicationContext(),BackgroundSoundService.class));
+                    mpBackground.start();
                 }
                 else{
-                    stopService(new Intent(getApplicationContext(), BackgroundSoundService.class));
+                    mpBackground.pause();
                 }
 
                 sw_Music.setChecked(musicSetting);
@@ -109,8 +109,8 @@ public class HomePage extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        Log.d("On Stop", "OnStop");
-        stopService(new Intent(this, BackgroundSoundService .class));
+        Log.d("On Stop", "OnStop00000000000000000000000000000000000000000000000");
+        stopMediaPlayer();
 
     }
 
@@ -118,11 +118,24 @@ public class HomePage extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        Log.d("On Start", "OnStart");
+        Log.d("On Start", "OnStart=====================================================");
 
         if(musicSetting)
-            startService(new Intent(this,BackgroundSoundService.class));
+            startMediaPlayer();
     }
+
+    public void startMediaPlayer(){
+       // MediaPlayer mp = new MediaPlayer();
+        mpBackground = MediaPlayer.create(this,R.raw.jazzyfrenchy);
+        mpBackground.start();
+    }
+
+    public void stopMediaPlayer(){
+        mpBackground.stop();
+        mpBackground.release();
+    }
+
+
 
     public void checkUser(){
         //get firebase auth instance

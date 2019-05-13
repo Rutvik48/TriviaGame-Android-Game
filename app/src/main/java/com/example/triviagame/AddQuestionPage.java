@@ -106,7 +106,7 @@ public class AddQuestionPage extends AppCompatActivity {
 
                 if(validateData())
 
-                    if (/*uploadDataToFireStore()*/true){
+                    if (uploadDataToFireStore()){
                         Toast.makeText(getApplicationContext(),"Question has been added.", Toast.LENGTH_SHORT).show();
                         clearAllFields();
                     }//else
@@ -143,8 +143,8 @@ public class AddQuestionPage extends AppCompatActivity {
         dataTemp.put(WRONG_ANS2,wrongAns2);
         dataTemp.put(WRONG_ANS3,wrongAns3);
 
-        boolean ret = collRef.document(question).set(dataTemp).isComplete();
-        return ret;
+        collRef.document(question).set(dataTemp);
+        return true;
     }
 
     private void setFullScreen(){

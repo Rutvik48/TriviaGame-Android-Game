@@ -519,25 +519,31 @@ public class QuestionPage extends AppCompatActivity {
         if (!mpMusic.isPlaying()) {
 
             if(headerClassInstance.getMusicPref(getApplicationContext()))
-                mpMusic.start();
+                startMediaPlayer();
         }
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("QuestionPage Status: ","BackGround");
-        appForegroundStatus = false;
-        mpMusic.pause();
-    }
+
 
     //stop the Media to free up resources
     @Override
     protected void onStop() {
         super.onStop();
-        stopService(new Intent(this,BackgroundSoundService.class));
+        stopMediaPlayer();
 
+    }
+
+
+    public void startMediaPlayer(){
+        // MediaPlayer mp = new MediaPlayer();
+        mpMusic = MediaPlayer.create(this,R.raw.goinghigher);
+        mpMusic.start();
+    }
+
+    public void stopMediaPlayer(){
+        mpMusic.stop();
+        mpMusic.release();
     }
 
 }

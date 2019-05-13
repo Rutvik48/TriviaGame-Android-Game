@@ -69,25 +69,31 @@ public class CategoriesPage extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        mpMusic.pause();
+        stopMediaPlayer();
 
     }
     @Override
     protected void onStart() {
         super.onStart();
 
-        if((headerClassInstance.getMusicPref(getApplicationContext())) && (!mpMusic.isPlaying()))
-            mpMusic.start();
+        if((headerClassInstance.getMusicPref(getApplicationContext())))
+            startMediaPlayer();
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if((headerClassInstance.getMusicPref(getApplicationContext())) && (!mpMusic.isPlaying()))
-            mpMusic.start();
+    public void startMediaPlayer(){
+        // MediaPlayer mp = new MediaPlayer();
+        mpMusic = MediaPlayer.create(this,R.raw.relaxing);
+        mpMusic.start();
     }
+
+    public void stopMediaPlayer(){
+        mpMusic.stop();
+        mpMusic.release();
+    }
+
+
+
 
     private void setCategoryNames(){
         //category in order of 1.Science & Nature, 2.Science: Computers, 3.General Knowledge

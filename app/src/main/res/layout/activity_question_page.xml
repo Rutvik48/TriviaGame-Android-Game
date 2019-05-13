@@ -266,7 +266,6 @@
             android:layout_marginRight="8dp"
             android:layout_weight="50"
             android:autoSizeTextType="uniform"
-            android:background="@drawable/coin"
             android:fontFamily="cursive"
             android:gravity="center_vertical"
             android:padding="10px"

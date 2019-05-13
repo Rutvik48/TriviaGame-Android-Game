@@ -13,6 +13,6 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper {
 
 
     public DatabaseOpenHelper(Context context) {
-        super(context, "GameDatabase.db",null, DATABASE_VERSION);
+        super(context, "GameDatabase",null, DATABASE_VERSION);
     }
 }

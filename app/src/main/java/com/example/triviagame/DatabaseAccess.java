@@ -26,7 +26,7 @@ public class DatabaseAccess {
     }
 
     public void open(){
-        this.db = openHelper.getWritableDatabase();
+        this.db = openHelper.getReadableDatabase();
     }
 
     public void close(){
@@ -41,7 +41,7 @@ public class DatabaseAccess {
 
     }
     private int totalCategory(){
-        cursor = db.rawQuery("SELECT Category From trivia_questions GROUP BY Category"+ HeaderClass.TABLE_NAME,new String[]{});
+        cursor = db.rawQuery("SELECT Category From new GROUP BY Category"+ HeaderClass.TABLE_NAME,new String[]{});
         //cursor.moveToFirst();
         return cursor.getCount();
 
@@ -53,7 +53,7 @@ public class DatabaseAccess {
         int number = totalCategory();
         String categoryArray[] = new String[number];
 
-        cursor = db.rawQuery("SELECT Category From trivia_questions GROUP BY Category",new String[]{});
+        cursor = db.rawQuery("SELECT Category From new GROUP BY Category",new String[]{});
 
         return categoryArray;
     }

@@ -10,7 +10,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,13 +27,15 @@ public class HomePage extends AppCompatActivity {
     //NOTE: btn is for Button, tv for TextView
     private Button btn_GameStart, btn_BackHome, btn_UserInfo;
     public TextView tv_LogIn, tv_ChangeBackground, tv_GameName;
+    private ImageView iv_logo;
     private Switch sw_Music;
     private ConstraintLayout layout;
     //to exit the app this condition will be used
-    private Boolean exitCondition = false;
+    private Boolean ifVis = true,exitCondition = false;
     public  static boolean musicSetting;
     private FirebaseAuth auth;
     private MediaPlayer mpPlayGame, mpHigh, mpBackground;
+    Animation frombottom,fromtop;
 
     HeaderClass headerClassInstance = new HeaderClass();
 
@@ -53,8 +58,27 @@ public class HomePage extends AppCompatActivity {
         changeBackground();
 
         switchMusic();
+
         sw_Music.setChecked(headerClassInstance.getMusicPref(getApplicationContext()));
         musicSetting = headerClassInstance.getMusicPref(getApplicationContext());
+        playAnimantion();
+
+
+    }
+
+    //plays the animation
+    private void playAnimantion(){
+        frombottom = AnimationUtils.loadAnimation(this,R.anim.frombottom);
+        fromtop = AnimationUtils.loadAnimation(this,R.anim.fromthetop);
+        btn_GameStart.setAnimation(frombottom);
+        tv_ChangeBackground.setAnimation(frombottom);
+        btn_UserInfo.setAnimation(fromtop);
+        iv_logo.setAnimation(fromtop);
+
+
+        if(ifVis){
+            tv_LogIn.setAnimation(fromtop);}
+
 
     }
 
@@ -202,6 +226,7 @@ public class HomePage extends AppCompatActivity {
     //function to assign buttons and texts to java variables
     private void assignVariables(){
 
+        iv_logo = findViewById(R.id.imageView4);
         mpBackground = MediaPlayer.create(this,R.raw.jazzyfrenchy);
         mpBackground.setLooping(true);
         mpPlayGame = MediaPlayer.create(this,R.raw.buttonpress);

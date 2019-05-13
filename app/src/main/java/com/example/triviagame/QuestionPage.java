@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,6 +46,8 @@ public class QuestionPage extends AppCompatActivity {
     private CategoriesPage categoriesPage = new CategoriesPage();
     private userClass user;
     private MediaPlayer mpWrong,mpCorrect,mpMusic;
+    Animation formRight, formLeft, wrongShake;
+
     HeaderClass headerClassInstance = new HeaderClass();
 
     @Override
@@ -73,7 +77,25 @@ public class QuestionPage extends AppCompatActivity {
 
         skipQuestion();
 
+        playAnimantion();
 
+        nextQuestion();
+
+
+
+    }
+
+    private void wrongAnim(Button btn){
+        btn.setAnimation(wrongShake);
+
+    }
+    private void playAnimantion(){
+
+
+        btn_Option1.setAnimation(formLeft);
+        btn_Option3.setAnimation(formLeft);
+        btn_Option2.setAnimation(formRight);
+        btn_Option4.setAnimation(formRight);
     }
 
 
@@ -319,6 +341,7 @@ public class QuestionPage extends AppCompatActivity {
                 deductPoint();
                 showRightAnswer();
                 mpWrong.start();
+                wrongAnim(clickedBtn);
             }
 
         }
@@ -371,6 +394,10 @@ public class QuestionPage extends AppCompatActivity {
     }
 
     public void assignValues(){
+
+        formLeft =  AnimationUtils.loadAnimation(this,R.anim.fortheleft);
+        formRight = AnimationUtils.loadAnimation(this,R.anim.fortheright);
+        wrongShake =  AnimationUtils.loadAnimation(this,R.anim.shake);
         mpMusic = MediaPlayer.create(this,R.raw.goinghigher);
         mpCorrect = MediaPlayer.create(this,R.raw.correct);
         mpWrong = MediaPlayer.create(this,R.raw.wronganswer);

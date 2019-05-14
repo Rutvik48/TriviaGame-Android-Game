@@ -114,7 +114,7 @@ public class SignUpPage extends AppCompatActivity {
         temp.document(email).set(dataTemp);
 
 
-        userClass.assignUserFields(email,uid);
+        userClass.assignUserFields(email,uid, 10);
     }
 
 

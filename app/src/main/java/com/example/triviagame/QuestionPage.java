@@ -108,7 +108,7 @@ public class QuestionPage extends AppCompatActivity {
             tv_SkipQuestion.setText("0");
             tv_SkipQuestion.setTypeface(Typeface.SANS_SERIF, Typeface.ITALIC);
         }else
-            tv_SkipQuestion.setText(Integer.toString(currentCoins));
+            tv_SkipQuestion.setText("-1 coin to skip");
 
         //this stores the number of coins user has
         int currentCoin = user.getCoins();
@@ -530,7 +530,12 @@ public class QuestionPage extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        stopMediaPlayer();
+
+        appForegroundStatus = false;
+        if(timesUp == true)
+            stopMediaPlayer();
+        else
+            mpMusic.pause();
 
     }
 

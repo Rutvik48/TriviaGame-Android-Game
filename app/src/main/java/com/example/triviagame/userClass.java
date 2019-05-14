@@ -55,16 +55,16 @@ public class userClass {
 
     }
 
-    public void assignUserFields(String email, String userID){
+    public void assignUserFields(String email, String userID, int coins){
 
         setUserEmail(email);
         setuID(userID);
-        setCoins(0);
+        setCoins(coins);
         setHighestScore(0);
     }
 
     public void emptyUserFields(){
-        assignUserFields(null, null);
+        assignUserFields(null, null, 0);
     }
 
     public void setUserEmail(String email){

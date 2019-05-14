@@ -141,17 +141,20 @@ public class LogInPage extends AppCompatActivity {
                         //If sign has failed, displaymeesage to user
                         //if succeeds auth state listner will be notified and logic handle the user
                         progressBar.setVisibility(View.GONE);
-                        userClass user = new userClass(getApplicationContext());
-                        user.userJustLogedIn = true;
-                        user.updateUI();
                         //there was an error
-                        if(!task.isSuccessful()){
-                            Toast.makeText(LogInPage.this,"Authentication failed", Toast.LENGTH_LONG ).show();
-                        }
-                        else{
+                        if(task.isSuccessful()){
+                            userClass user = new userClass(getApplicationContext());
+                            user.userJustLogedIn = true;
+                            user.updateUI();
+
+                            Toast.makeText(LogInPage.this,"Successfully Logged in.", Toast.LENGTH_SHORT ).show();
                             Intent intent = new Intent(LogInPage.this,HomePage.class);
                             startActivity(intent);
                             finish();
+
+                        }
+                        else{
+                            Toast.makeText(LogInPage.this,"Authentication failed", Toast.LENGTH_LONG ).show();
                         }
                     }
                 });
